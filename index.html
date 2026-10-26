@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>রক্তবন্ধু বাংলাদেশ</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<meta name="theme-color" content="#c8102e">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap">
 <style>
 :root{--bg:#f6faf7;--cd:#fff;--tx:#17251e;--mu:#5d6f66;--rd:#c8102e;--rd2:#9f0c24;--rdt:#c8102e;--gr:#00704a;--gr2:#005a3b;--okt:#00704a;--ln:#dbe6df;--wn:#9a5b00;--on:#fff;--sf:#e8f3ec;
@@ -126,9 +130,9 @@ return`<section class="hero"><svg viewBox="0 0 32 32" aria-hidden="true"><path d
 <a class="btn big" href="#" data-go="search">রক্তদাতা খুঁজুন</a>
 <a class="btn g" href="#" data-go="request">জরুরি রক্তের অনুরোধ</a>
 <a class="btn o" href="#" data-go="register">দাতা হিসেবে নিবন্ধন করুন</a>
-<div class="box"><h3>এখন তালিকায়</h3><div class="kv"><span>দাতা (ডেমোসহ)</span><b>${bn(D)}</b></div><div class="kv"><span>চলমান অনুরোধ</span><b>${bn(Q)}</b></div></div>
+<div class="box"><h3>এখন তালিকায়</h3><div class="kv"><span>দাতা</span><b>${bn(D)}</b></div><div class="kv"><span>চলমান অনুরোধ</span><b>${bn(Q)}</b></div></div>
 <div class="box"><h3>আপনার গোপনীয়তা</h3><ul><li>ফোন নম্বর ডিফল্টভাবে লুকানো থাকে।</li><li>নম্বর দেখতে হলে দাতার অনুমতি লাগে।</li><li>সন্দেহজনক প্রোফাইল রিপোর্ট করা যায়।</li></ul></div>
-<p class="note"><a href="#" data-go="admin" style="color:inherit">অ্যাডমিন (ডেমো)</a></p>`};
+${isAdm()?`<p class="note"><a href="#" data-go="admin" style="color:inherit">অ্যাডমিন</a></p>`:''}`};
 const search=async()=>`<h2>রক্তদাতা খুঁজুন</h2><form id="f-s"><label for="sg">রক্তের গ্রুপ</label><select id="sg">${o(G,'','সব গ্রুপ')}</select>${loc('s',{},1)}</form><div id="rs"></div>`;
 async function res(){const g=V('sg'),dv=V('sdv'),d=V('sd'),u=V('su');
 const L=(await DB.pub()).filter(x=>!x.hid&&!x.sus&&(!g||x.g===g)&&(!dv||x.dv===dv)&&(!d||x.d===d)&&(!u||x.u.includes(u)));
@@ -198,6 +202,7 @@ if(f==='f-req'){if(!sess())return toast('অনুরোধ পোস্ট ক�
 const q={id:uid(),g:V('qg'),b:V('qb'),dv:V('qdv'),d:V('qd'),u:V('qu'),h:V('qh'),urg:V('qurg'),n:V('qn'),p,by:sess()||'anon',ts:Date.now(),open:true};await DB.put('requests',q);
 const k=(await DB.pub()).filter(x=>x.g===q.g&&x.d===q.d&&!x.hid&&!x.sus&&st(x)[0]==='s-ok').length;toast('অনুরোধ পোস্ট হয়েছে। এই জেলায় '+bn(k)+' জন প্রস্তুত দাতা আছেন।');return render()}
 if(f==='f-rep'){if(!sess())return toast('রিপোর্ট করতে আগে প্রবেশ করুন');await DB.put('reps',{id:uid(),to:ev.target.dataset.id,why:V('rr'),txt:V('rt'),by:sess()||'anon'});toast('রিপোর্ট পাঠানো হয়েছে, ধন্যবাদ');return render()}}catch(x){toast('ব্যর্থ হয়েছে: '+(x.code||x.message))}});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 onAuthStateChanged(auth,async u=>{ADM=false;if(u){ADM=!!(await DB.get('admins',u.uid))}render()});
 </script>
 </body>
