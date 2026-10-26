@@ -76,7 +76,7 @@ ul{margin:6px 0;padding-left:20px}
 <div id="t" role="status"></div>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import{getAuth,RecaptchaVerifier,signInWithPhoneNumber,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import{getAuth,RecaptchaVerifier,signInWithPhoneNumber,onAuthStateChanged,signOut,GoogleAuthProvider,signInWithPopup}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import{getFirestore,collection,getDocs,doc,getDoc,setDoc,deleteDoc,query,where}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 /* Firebase Console থেকে পাওয়া মানগুলো এখানে বসান */
 const CFG={apiKey:"AIzaSyCvfYlmg7_UDnDk5HY4jR_k-nMDuzrdV_g",authDomain:"roktobondhu-ca076.firebaseapp.com",projectId:"roktobondhu-ca076",storageBucket:"roktobondhu-ca076.firebasestorage.app",messagingSenderId:"1094106020636",appId:"1:1094106020636:web:005ea987f32c1f75a118d9"};
@@ -120,6 +120,7 @@ wr('rb2_donors',Array.from({length:16},(_,i)=>{const l=L[(i+(i>7?1:0))%8];return
 const loc=(p,v={},any)=>{const dv=v.dv||'';return`<div class="row"><div><label for="${p}dv">বিভাগ</label><select id="${p}dv" data-dv="${p}"${any?'':' required'}>${o(DS,dv,any?'সব বিভাগ':'বেছে নিন')}</select></div><div><label for="${p}d">জেলা</label><select id="${p}d"${any?'':' required'}>${o(dv?DIV[dv]:(any?ALLD:[]),v.d,any?'সব জেলা':'বেছে নিন')}</select></div></div><label for="${p}u">উপজেলা${any?' (ঐচ্ছিক)':''}</label><input id="${p}u" value="${E(v.u||'')}" placeholder="যেমন: মিরপুর"${any?'':' required'}>`};
 const pf=(x={})=>`<label for="fn">পূর্ণ নাম</label><input id="fn" value="${E(x.n||'')}" autocomplete="name" required>
 <label for="fg">রক্তের গ্রুপ</label><select id="fg" required>${o(G,x.g,'বেছে নিন')}</select>${loc('f',x)}
+<label for="fp">মোবাইল নম্বর (প্রকাশ্যে দেখানো হবে না)</label><input id="fp" type="tel" inputmode="numeric" value="${E(x.p||'')}" placeholder="01712345678" required>
 <label for="fl">সর্বশেষ রক্ত দেওয়ার তারিখ (না দিলে ফাঁকা রাখুন)</label><input id="fl" type="date" max="${today}" value="${x.ld||''}">
 <label class="ck"><input id="fa" type="checkbox"${x.av!==false?' checked':''}> আমি এখন রক্ত দিতে ইচ্ছুক</label>`;
 const card=x=>{const s=st(x);return`<a class="c" href="#" data-go="donor" data-p="${x.id}"><span class="b"><i>${E(x.g)}</i></span><div class="i"><b>${E(x.n)}${x.demo?'<em class="tg">ডেমো</em>':''}</b><small>${E(x.u)}, ${E(x.d)}, ${E(x.dv)} বিভাগ</small><small class="${s[0]}">${s[1]}</small></div></a>`};
@@ -147,8 +148,8 @@ return`<h2>${E(x.n)}${x.demo?'<em class="tg">ডেমো</em>':''}</h2>
 <div class="box"><div class="kv"><span>রক্তের গ্রুপ</span><b>${E(x.g)}</b></div><div class="kv"><span>এলাকা</span><b>${E(x.u)}, ${E(x.d)}</b></div><div class="kv"><span>বিভাগ</span><b>${E(x.dv)}</b></div><div class="kv"><span>অবস্থা</span><b class="${s[0]}">${s[1]}</b></div></div>
 ${x.demo?'<p class="note">এটি ডেমো প্রোফাইল, বাস্তব মানুষ নয়।</p>':''}${ct}
 <details class="box"><summary>এই প্রোফাইল রিপোর্ট করুন</summary><form id="f-rep" data-id="${x.id}"><label for="rr">কারণ</label><select id="rr" required>${o(WHY,'','বেছে নিন')}</select><label for="rt">বিস্তারিত (ঐচ্ছিক)</label><textarea id="rt"></textarea><button class="btn o" type="submit">রিপোর্ট পাঠান</button></form></details>`}
-const register=async()=>{if(!sess())return login();if(await DB.get('donors',sess()))return me();return`<h2>দাতা হিসেবে নিবন্ধন</h2><p class="mu">আপনার ফোন নম্বর প্রকাশ্যে দেখানো হবে না।</p><form id="f-reg">${pf()}<label class="ck"><input id="fc" type="checkbox" required> আমি জানি আমার গ্রুপ ও এলাকা (উপজেলা পর্যন্ত) সবার সার্চে দেখা যাবে।</label><button class="btn" type="submit">নিবন্ধন করুন</button></form>`};
-const login=async()=>`<h2>প্রবেশ করুন</h2><form id="f-login"><label for="lp">মোবাইল নম্বর</label><input id="lp" type="tel" inputmode="numeric" placeholder="01712345678" required><button class="btn" type="submit" id="lb">কোড পাঠান</button></form><form id="f-otp" hidden><label for="lo">SMS এ আসা ৬ সংখ্যার কোড</label><input id="lo" inputmode="numeric" maxlength="6" required><button class="btn" type="submit">যাচাই করুন</button></form><p class="note">প্রথমবার হলে কোড যাচাইয়ের পর নিবন্ধনের ফর্ম আসবে। আপনার নম্বর কখনো সার্চে বা প্রোফাইলে প্রকাশ্য হয় না।</p>`;
+const register=async()=>{if(!sess())return login();if(await DB.get('donors',sess()))return me();return`<h2>দাতা হিসেবে নিবন্ধন</h2><p class="mu">আপনার ফোন নম্বর প্রকাশ্যে দেখানো হবে না। নম্বর যাচাই করা হয় না, তাই সঠিক নম্বর দিন।</p><form id="f-reg">${pf({p:(auth.currentUser.phoneNumber||'').replace('+88','')})}<label class="ck"><input id="fc" type="checkbox" required> আমি জানি আমার গ্রুপ ও এলাকা (উপজেলা পর্যন্ত) সবার সার্চে দেখা যাবে।</label><button class="btn" type="submit">নিবন্ধন করুন</button></form>`};
+const login=async()=>`<h2>প্রবেশ করুন</h2><button class="btn big" data-act="google">Google দিয়ে প্রবেশ</button><p class="mu" style="text-align:center;margin:18px 0 0">অথবা ফোন নম্বর দিয়ে</p><form id="f-login"><label for="lp">মোবাইল নম্বর</label><input id="lp" type="tel" inputmode="numeric" placeholder="01712345678" required><button class="btn" type="submit" id="lb">কোড পাঠান</button></form><form id="f-otp" hidden><label for="lo">SMS এ আসা ৬ সংখ্যার কোড</label><input id="lo" inputmode="numeric" maxlength="6" required><button class="btn" type="submit">যাচাই করুন</button></form><p class="note">প্রথমবার হলে কোড যাচাইয়ের পর নিবন্ধনের ফর্ম আসবে। আপনার নম্বর কখনো সার্চে বা প্রোফাইলে প্রকাশ্য হয় না।</p>`;
 const request=async()=>{const me=sess(),A=await DB.all('requests'),L=A.filter(x=>x.open).sort((a,b)=>URG.indexOf(a.urg)-URG.indexOf(b.urg)||b.ts-a.ts);
 return`<h2>জরুরি রক্তের অনুরোধ</h2>
 <details class="box"><summary>নতুন অনুরোধ পোস্ট করুন</summary><form id="f-req"><div class="row"><div><label for="qg">রক্তের গ্রুপ</label><select id="qg" required>${o(G,'','বেছে নিন')}</select></div><div><label for="qb">কত ব্যাগ</label><input id="qb" type="number" min="1" max="20" value="1" required></div></div>${loc('q')}
@@ -161,7 +162,7 @@ const R=(await DB.q('creq','to',u)).filter(r=>r.ok===null);
 return`<h2>আমার প্রোফাইল</h2>
 <div class="box"><h3>যোগাযোগের অনুরোধ</h3>${R.length?R.map(r=>`<div class="kv"><span>${E(r.fromName)}</span><span><button class="sm" data-act="share" data-id="${r.id}">নম্বর দিন</button> <button class="sm" data-act="deny" data-id="${r.id}">না</button></span></div>`).join(''):'<p class="mu">কোনো নতুন অনুরোধ নেই।</p>'}</div>
 <div class="box"><h3>গোপনীয়তা সেটিং</h3><label class="ck"><input type="checkbox" data-pv="sp"${pv.sp?' checked':''}> লগইন করা সবাইকে আমার ফোন নম্বর দেখান (বন্ধ থাকলে শুধু অনুমতি দিলে)</label><label class="ck"><input type="checkbox" data-pv="hid"${x.hid?' checked':''}> সার্চ থেকে আমার প্রোফাইল লুকান</label></div>
-<form id="f-edit" class="box">${pf(x)}<button class="btn" type="submit">সংরক্ষণ করুন</button></form>
+<form id="f-edit" class="box">${pf({...x,p:pv.p})}<button class="btn" type="submit">সংরক্ষণ করুন</button></form>
 <button class="btn o" data-act="out">লগআউট</button><button class="btn o" data-act="delacct">অ্যাকাউন্ট মুছুন</button>`}
 async function admin(){if(!isAdm())return`<h2>অ্যাডমিন</h2><p class="mu">শুধু অ্যাডমিনের জন্য।</p>`;
 const P=await DB.all('reps'),D=await DB.all('donors'),nm=id=>(D.find(x=>x.id===id)||{n:'(মুছে গেছে)'}).n,S=D.filter(x=>x.sus);
@@ -178,6 +179,7 @@ document.addEventListener('click',async ev=>{const a=ev.target.closest('[data-go
 if(d.go){if(d.root!==undefined)stack=[];return go(d.go,d.p)}
 const u=sess();
 if(d.act==='bk'){cur=stack.pop()||{r:'home'};return render()}
+if(d.act==='google'){await signInWithPopup(auth,new GoogleAuthProvider());const g=await DB.get('donors',sess());return reset(g?'me':'register')}
 if(d.act==='out'){await signOut(auth);return reset('home')}
 if(d.act==='creq'){const m=await DB.get('donors',u);await DB.put('creq',{id:u+'_'+id,to:id,from:u,fromName:m.n,ok:null});toast('অনুরোধ পাঠানো হয়েছে')}
 if(d.act==='share'||d.act==='deny'){const r=await DB.get('creq',id);r.ok=d.act==='share';await DB.put('creq',r);if(r.ok){const m=(await DB.get('donorsPrivate',u))||{id:u,p:auth.currentUser.phoneNumber||'',sp:false,shared:[]};m.shared=[...(m.shared||[]),r.from];await DB.put('donorsPrivate',m)}toast(r.ok?'নম্বর শেয়ার করা হয়েছে':'অনুরোধ বাতিল')}
@@ -193,9 +195,10 @@ if(t.closest('#f-s'))res()});
 document.addEventListener('input',ev=>{if(ev.target.id==='su')res()});
 document.addEventListener('submit',async ev=>{ev.preventDefault();const f=ev.target.id;try{
 const fields=()=>({n:V('fn'),g:V('fg'),dv:V('fdv'),d:V('fd'),u:V('fu'),ld:$('#fl').value,av:$('#fa').checked});
-if(f==='f-reg'||f==='f-edit'){const x=fields(),u=sess();if(!u)return toast('আগে প্রবেশ করুন');
-if(f==='f-reg'){await DB.put('donors',{id:u,hid:false,sus:false,...x});await DB.put('donorsPrivate',{id:u,p:auth.currentUser.phoneNumber||'',sp:false,shared:[]});toast('নিবন্ধন সম্পন্ন হয়েছে');return reset('me')}
-const m=await DB.get('donors',u);await DB.put('donors',Object.assign(m,x));toast('প্রোফাইল সংরক্ষিত হয়েছে');return render()}
+if(f==='f-reg'||f==='f-edit'){const x=fields(),u=sess(),p=ph(V('fp'));if(!u)return toast('আগে প্রবেশ করুন');if(!okp(p))return toast('সঠিক মোবাইল নম্বর দিন, যেমন 01712345678');
+const pv0=(await DB.get('donorsPrivate',u))||{id:u,sp:false,shared:[]};pv0.p=p;
+if(f==='f-reg'){await DB.put('donors',{id:u,hid:false,sus:false,...x});await DB.put('donorsPrivate',pv0);toast('নিবন্ধন সম্পন্ন হয়েছে');return reset('me')}
+const m=await DB.get('donors',u);await DB.put('donors',Object.assign(m,x));await DB.put('donorsPrivate',pv0);toast('প্রোফাইল সংরক্ষিত হয়েছে');return render()}
 if(f==='f-login'){const p=ph(V('lp'));if(!okp(p))return toast('সঠিক মোবাইল নম্বর দিন');try{if(window.rv)window.rv.clear()}catch(x){}window.rv=new RecaptchaVerifier(auth,'lb',{size:'invisible'});window.cf=await signInWithPhoneNumber(auth,'+88'+p,window.rv);$('#f-login').hidden=true;$('#f-otp').hidden=false;return toast('কোড পাঠানো হয়েছে')}
 if(f==='f-otp'){await window.cf.confirm(V('lo'));const x=await DB.get('donors',sess());return reset(x?'me':'register')}
 if(f==='f-req'){if(!sess())return toast('অনুরোধ পোস্ট করতে আগে প্রবেশ করুন');const p=ph(V('qp'));if(!okp(p))return toast('সঠিক মোবাইল নম্বর দিন');
