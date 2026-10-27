@@ -74,6 +74,7 @@ ul{margin:6px 0;padding-left:20px}
 .pin{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font:700 20px/1 sans-serif;border:2px solid #fff;box-shadow:0 1px 4px #0006}.pin.hospital{background:#c8102e}.pin.blood{background:#00704a;font-size:15px}
 .b2{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:#fff;font:700 24px/1 sans-serif}.b2.hospital{background:var(--rd)}.b2.blood{background:var(--gr);font-size:18px}
 .call.n{background:var(--gr2)}
+#nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:12px;min-height:54px}#nav svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 </style>
 </head>
 <body>
@@ -83,7 +84,7 @@ ul{margin:6px 0;padding-left:20px}
 <button id="hl" class="sm" data-go="login">প্রবেশ</button></header>
 <main id="app"></main>
 </div>
-<nav id="nav"><button data-go="home" data-root>হোম</button><button data-go="map" data-root>ম্যাপ</button><button data-go="search" data-root>দাতা</button><button data-go="request" data-root>জরুরি</button><button data-go="me" data-root>আমার</button></nav>
+<nav id="nav"><button data-go="home" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg><span>হোম</span></button><button data-go="map" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg><span>ম্যাপ</span></button><button data-go="search" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.2c3 .2 5 2.4 5 5.8"/></svg><span>দাতা</span></button><button data-go="request" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 01-12 0c0-4.5 6-11 6-11z"/><path d="M12 11v5M9.5 13.5h5"/></svg><span>জরুরি</span></button><button data-go="me" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg><span>প্রোফাইল</span></button></nav>
 <div id="t" role="status"></div>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
@@ -178,8 +179,9 @@ return`<h2>আমার প্রোফাইল</h2>
 ${donBox(x,DL)}
 <div class="box"><h3>যোগাযোগের অনুরোধ</h3>${R.length?R.map(r=>`<div class="kv"><span>${E(r.fromName)}</span><span><button class="sm" data-act="share" data-id="${r.id}">নম্বর দিন</button> <button class="sm" data-act="deny" data-id="${r.id}">না</button></span></div>`).join(''):'<p class="mu">কোনো নতুন অনুরোধ নেই।</p>'}</div>
 <div class="box"><h3>গোপনীয়তা সেটিং</h3><label class="ck"><input type="checkbox" data-pv="sp"${pv.sp?' checked':''}> লগইন করা সবাইকে আমার ফোন নম্বর দেখান (বন্ধ থাকলে শুধু অনুমতি দিলে)</label><label class="ck"><input type="checkbox" data-pv="hid"${x.hid?' checked':''}> সার্চ থেকে আমার প্রোফাইল লুকান</label></div>
-<form id="f-edit" class="box">${pf({...x,p:pv.p})}<button class="btn" type="submit">সংরক্ষণ করুন</button></form>
-<button class="btn o" data-act="out">লগআউট</button><button class="btn o" data-act="delacct">অ্যাকাউন্ট মুছুন</button>`}
+<form id="f-edit" class="box">${pf({...x,p:pv.p})}</form>
+<div class="box"><h3>সংরক্ষণ ও অ্যাকাউন্ট</h3><button class="btn" type="submit" form="f-edit">সংরক্ষণ করুন</button><button class="btn o" data-act="out">লগআউট</button>
+<details style="margin-top:14px;border:0;padding:0;background:none"><summary style="color:var(--mu);font-weight:400">অ্যাকাউন্ট মুছে ফেলুন</summary><p class="mu">অ্যাকাউন্ট মুছলে আপনার প্রোফাইল, ফোন নম্বর আর রক্তদানের তালিকা মুছে যাবে, ফেরত আনা যাবে না। চাইলে পরে আবার প্রবেশ করে নতুন প্রোফাইল বানাতে পারবেন।</p><button class="btn" style="background:#8e0e24" data-act="delacct">অ্যাকাউন্ট মুছুন</button></details></div>`}
 async function admin(){if(!isAdm())return`<h2>অ্যাডমিন</h2><p class="mu">শুধু অ্যাডমিনের জন্য।</p>`;
 const P=await DB.all('reps'),D=await DB.all('donors'),nm=id=>(D.find(x=>x.id===id)||{n:'(মুছে গেছে)'}).n,S=D.filter(x=>x.sus);
 return`<h2>অ্যাডমিন মডারেশন</h2><div class="box"><h3>রিপোর্ট (${bn(P.length)})</h3>${P.length?P.map(r=>`<div class="kv" style="flex-wrap:wrap"><span><b>${E(nm(r.to))}</b><br><small class="mu">${E(r.why)}${r.txt?': '+E(r.txt):''}</small></span><span><button class="sm" data-act="sus" data-id="${r.to}" data-rid="${r.id}">স্থগিত</button> <button class="sm" data-act="dis" data-rid="${r.id}">বাতিল</button></span></div>`).join(''):'<p class="mu">কোনো রিপোর্ট নেই।</p>'}</div>
@@ -262,7 +264,7 @@ try{const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&
 if(!j.length)return toast('এলাকা খুঁজে পাওয়া যায়নি');const b=j[0].boundingbox;MAP.fitBounds([[+b[0],+b[2]],[+b[1],+b[3]]]);await findHere()}catch(e){toast('এলাকা খোঁজা যায়নি, একটু পরে চেষ্টা করুন')}}
 async function render(){if(CFG.apiKey.startsWith('PASTE')){$('#app').innerHTML='<p class="em">Firebase কনফিগ এখনো বসানো হয়নি। index.html এর ওপরের CFG অংশে আপনার মান বসান।</p>';return}const f={home,map:mapPage,search,register,login,request,me,admin,donor:()=>pDonor(cur.p)}[cur.r]||home;let h;
 try{h=await f()}catch(x){h='<p class="em">কিছু ভুল হয়েছে। আবার চেষ্টা করুন।</p>'}
-$('#app').innerHTML=h;$('#bk').hidden=!stack.length;$('#hl').textContent=sess()?'আমার':'প্রবেশ';$('#hl').dataset.go=sess()?'me':'login';
+$('#app').innerHTML=h;$('#bk').hidden=!stack.length;$('#hl').textContent=sess()?'প্রোফাইল':'প্রবেশ';$('#hl').dataset.go=sess()?'me':'login';
 document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.go===cur.r));
 if(cur.r==='search')res();if(cur.r==='map')initMap();window.scrollTo(0,0)}
 let tm;function toast(m){const t=$('#t');t.textContent=m;t.classList.add('show');clearTimeout(tm);tm=setTimeout(()=>t.classList.remove('show'),3200)}
@@ -284,7 +286,7 @@ if(d.act==='share'||d.act==='deny'){const r=await DB.get('creq',id);r.ok=d.act==
 if(d.act==='close'){const r=await DB.get('requests',id);r.open=false;await DB.put('requests',r);toast('অনুরোধ বন্ধ হয়েছে')}
 if(d.act==='sus'||d.act==='unsus'){const x=await DB.get('donors',id);if(x){x.sus=d.act==='sus';await DB.put('donors',x)}if(d.rid)await DB.del('reps',d.rid)}
 if(d.act==='dis')await DB.del('reps',d.rid);
-if(d.act==='delacct'){if(!d.sure){a.dataset.sure=1;a.textContent='নিশ্চিত? আবার চাপুন';return}await DB.del('donors',u);await DB.del('donorsPrivate',u);await signOut(auth);toast('প্রোফাইল মুছে গেছে');return reset('home')}
+if(d.act==='delacct'){if(!d.sure){a.dataset.sure=1;a.textContent='নিশ্চিত? আবার চাপুন';return}for(const r of await DB.q('donations','uid',u))await DB.del('donations',r.id);await DB.del('donors',u);await DB.del('donorsPrivate',u);await signOut(auth);toast('প্রোফাইল মুছে গেছে');return reset('home')}
 render()}catch(x){toast('ব্যর্থ হয়েছে: '+(x.code||x.message))}});
 document.addEventListener('change',async ev=>{const t=ev.target;
 if(t.dataset.dv!==undefined){const s=$('#'+t.dataset.dv+'d'),any=s.options[0].textContent.startsWith('সব');s.innerHTML=o(t.value?DIV[t.value]:(any?ALLD:[]),'',any?'সব জেলা':'বেছে নিন')}
