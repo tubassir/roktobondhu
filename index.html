@@ -7,6 +7,8 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <meta name="theme-color" content="#c8102e">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap">
 <style>
@@ -62,6 +64,16 @@ ul{margin:6px 0;padding-left:20px}
 #t.show{opacity:1}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion:reduce){#t{transition:none}}
+.hero2{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#c8102e,#8e0e24);color:#fff;border-radius:22px;padding:22px 20px;margin-top:6px}.hero2 h2{margin:0;font-size:28px;line-height:1.3;flex:1}.hero2 svg{width:96px;height:96px;flex:none}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}.tile{display:flex;flex-direction:column;gap:4px;background:var(--cd);border:1px solid var(--ln);border-radius:18px;padding:16px;color:var(--tx);text-decoration:none;min-height:130px}.tile .ti{font-size:34px;line-height:1}.tile b{font-size:18px}.tile small{color:var(--mu);font-size:14px}
+.sec{display:flex;justify-content:space-between;align-items:center;margin-top:22px}.sec h3{margin:0;font-size:19px}.sec a{color:var(--rdt);text-decoration:none;font-weight:600}
+.av{width:52px;height:52px;border-radius:50%;object-fit:cover;flex:none}
+.dg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}.dc{border:1px solid var(--ln);background:var(--cd);color:var(--tx);border-radius:12px;padding:8px 4px;font-family:inherit;display:flex;flex-direction:column;align-items:center;cursor:pointer;min-height:58px;font-size:15px}.dc small{color:var(--mu);font-size:12px}
+#mp{height:380px;border-radius:16px;margin:14px 0;position:relative;z-index:0;border:1px solid var(--ln);background:var(--sf)}
+.tabs2{display:flex;gap:8px;margin:6px 0}.tabs2 button{flex:1;min-height:44px;border:1px solid var(--ln);background:var(--cd);color:var(--tx);border-radius:12px;font:600 16px inherit;font-family:inherit;cursor:pointer}.tabs2 button.on{background:var(--rd);color:var(--on);border-color:var(--rd)}
+.pin{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font:700 20px/1 sans-serif;border:2px solid #fff;box-shadow:0 1px 4px #0006}.pin.hospital{background:#c8102e}.pin.blood{background:#00704a;font-size:15px}
+.b2{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:#fff;font:700 24px/1 sans-serif}.b2.hospital{background:var(--rd)}.b2.blood{background:var(--gr);font-size:18px}
+.call.n{background:var(--gr2)}
 </style>
 </head>
 <body>
@@ -72,7 +84,7 @@ ul{margin:6px 0;padding-left:20px}
 <button id="hl" class="sm" data-go="login">প্রবেশ</button></header>
 <main id="app"></main>
 </div>
-<nav id="nav"><button data-go="home" data-root>হোম</button><button data-go="search" data-root>খুঁজুন</button><button data-go="request" data-root>জরুরি</button><button data-go="me" data-root>আমার</button></nav>
+<nav id="nav"><button data-go="home" data-root>হোম</button><button data-go="map" data-root>ম্যাপ</button><button data-go="search" data-root>দাতা</button><button data-go="request" data-root>জরুরি</button><button data-go="me" data-root>আমার</button></nav>
 <div id="t" role="status"></div>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
@@ -123,16 +135,19 @@ const pf=(x={})=>`<label for="fn">পূর্ণ নাম</label><input id="fn
 <label for="fp">মোবাইল নম্বর (প্রকাশ্যে দেখানো হবে না)</label><input id="fp" type="tel" inputmode="numeric" value="${E(x.p||'')}" placeholder="01712345678" required>
 <label for="fl">সর্বশেষ রক্ত দেওয়ার তারিখ (না দিলে ফাঁকা রাখুন)</label><input id="fl" type="date" max="${today}" value="${x.ld||''}">
 <label class="ck"><input id="fa" type="checkbox"${x.av!==false?' checked':''}> আমি এখন রক্ত দিতে ইচ্ছুক</label>${auth.currentUser&&auth.currentUser.photoURL?`<label class="ck"><input id="fph" type="checkbox"${x.ph?' checked':''}> প্রোফাইলে ও শেয়ার কার্ডে আমার গুগল ছবি দেখান</label>`:''}`;
-const card=x=>{const s=st(x);return`<a class="c" href="#" data-go="donor" data-p="${x.id}"><span class="b"><i>${E(x.g)}</i></span><div class="i"><b>${E(x.n)}${x.demo?'<em class="tg">ডেমো</em>':''}</b><small>${E(x.u)}, ${E(x.d)}, ${E(x.dv)} বিভাগ</small><small class="${s[0]}">${s[1]}</small></div></a>`};
+const card=x=>{const s=st(x);return`<a class="c" href="#" data-go="donor" data-p="${x.id}">${x.ph?`<img class="av" src="${E(x.ph)}" alt="" referrerpolicy="no-referrer">`:''}<span class="b"><i>${E(x.g)}</i></span><div class="i"><b>${E(x.n)}${x.demo?'<em class="tg">ডেমো</em>':''}</b><small>${E(x.u)}, ${E(x.d)}, ${E(x.dv)} বিভাগ</small>${x.dn?`<small>রক্তদান: ${bn(x.dn)} বার</small>`:''}<small class="${s[0]}">${s[1]}</small></div></a>`};
 let cur={r:'home'},stack=[];
 function go(r,p){stack.push(cur);cur={r,p};render()}
-const home=async()=>{const D=(await DB.pub()).filter(x=>!x.hid&&!x.sus).length,Q=(await DB.all('requests')).filter(x=>x.open).length;
-return`<section class="hero"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2C16 2 6 14 6 20a10 10 0 0020 0C26 14 16 2 16 2z" fill="var(--rd)"/><path d="M16 14v8M12 18h8" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg><h1>রক্তবন্ধু বাংলাদেশ</h1><p class="mu">গ্রুপ ও এলাকা অনুযায়ী রক্তদাতা খুঁজুন</p></section>
-<a class="btn big" href="#" data-go="search">রক্তদাতা খুঁজুন</a>
-<a class="btn g" href="#" data-go="request">জরুরি রক্তের অনুরোধ</a>
-<a class="btn o" href="#" data-go="register">দাতা হিসেবে নিবন্ধন করুন</a>
-<div class="box"><h3>এখন তালিকায়</h3><div class="kv"><span>দাতা</span><b>${bn(D)}</b></div><div class="kv"><span>চলমান অনুরোধ</span><b>${bn(Q)}</b></div></div>
-<div class="box"><h3>আপনার গোপনীয়তা</h3><ul><li>ফোন নম্বর ডিফল্টভাবে লুকানো থাকে।</li><li>নম্বর দেখতে হলে দাতার অনুমতি লাগে।</li><li>সন্দেহজনক প্রোফাইল রিপোর্ট করা যায়।</li></ul></div>
+const home=async()=>{const Q=(await DB.all('requests')).filter(x=>x.open).sort((a,b)=>b.ts-a.ts).slice(0,3);
+return`<div class="hero2"><h2>এক ফোঁটা রক্ত<br>বাঁচাতে পারে<br>একটি জীবন</h2><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2C16 2 6 14 6 20a10 10 0 0020 0C26 14 16 2 16 2z" fill="#fff"/><path d="M16 14v8M12 18h8" stroke="#c8102e" stroke-width="2.4" stroke-linecap="round"/></svg></div>
+<div class="tiles">
+<a class="tile" href="#" data-go="map"><span class="ti">🗺️</span><b>বাংলাদেশের ম্যাপ</b><small>বিভাগ, জেলা ও উপজেলা অনুযায়ী খুঁজুন</small></a>
+<a class="tile" href="#" data-go="search"><span class="ti">🩸</span><b>রক্তদাতা খুঁজুন</b><small>আপনার এলাকার দাতাদের তালিকা</small></a>
+<a class="tile" href="#" data-go="map"><span class="ti">🏥</span><b>হাসপাতাল ও ব্লাড ব্যাংক</b><small>ঠিকানা, যোগাযোগ ও পথ</small></a>
+<a class="tile" href="#" data-go="me"><span class="ti">👤</span><b>আমার প্রোফাইল</b><small>রক্তদানের ইতিহাস ও শেয়ার</small></a></div>
+<div class="sec"><h3>সাম্প্রতিক আপডেট</h3><a href="#" data-go="request">সকল দেখুন →</a></div>
+${Q.length?Q.map(x=>`<a class="c" href="#" data-go="request"><span class="b"><i>${E(x.g)}</i></span><div class="i"><b>${bn(x.b)} ব্যাগ রক্ত লাগবে</b><small>${E(x.h)}, ${E(x.d)}</small><small class="s-w">${E(x.urg)}</small></div></a>`).join(''):'<p class="em">এখন কোনো চলমান অনুরোধ নেই।</p>'}
+${sess()?'':'<a class="btn o" href="#" data-go="register">দাতা হিসেবে নিবন্ধন করুন</a>'}
 ${isAdm()?`<p class="note"><a href="#" data-go="admin" style="color:inherit">অ্যাডমিন</a></p>`:''}`};
 const search=async()=>`<h2>রক্তদাতা খুঁজুন</h2><form id="f-s"><label for="sg">রক্তের গ্রুপ</label><select id="sg">${o(G,'','সব গ্রুপ')}</select>${loc('s',{},1)}</form><div id="rs"></div>`;
 async function res(){const g=V('sg'),dv=V('sdv'),d=V('sd'),u=V('su');
@@ -207,11 +222,50 @@ const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='ro
 async function sync(u){const L=await DB.q('donations','uid',u),m=await DB.get('donors',u);if(!m)return;m.dn=L.length;m.dp=new Set(L.map(r=>r.h.toLowerCase())).size;const last=L.map(r=>r.dt).sort().pop();if(last&&(!m.ld||last>m.ld))m.ld=last;await DB.put('donors',m)}
 const donBox=(x,L)=>`<div class="box"><h3>আমার রক্তদান</h3><div class="kv"><span>মোট দান</span><b>${bn(x.dn||0)} বার</b></div><div class="kv"><span>দানস্থল</span><b>${bn(x.dp||0)}টি</b></div>${L.map(r=>`<div class="kv"><span><b>${E(r.h)}</b><br><small class="mu">${E(r.d)}, ${new Date(r.dt).toLocaleDateString('bn-BD')}</small></span><button class="sm" data-act="deldon" data-id="${r.id}">মুছুন</button></div>`).join('')}
 <details><summary>+ রক্তদান যোগ করুন</summary><form id="f-don"><label for="dh">হাসপাতাল বা স্থানের নাম</label><input id="dh" required><label for="dd">জেলা</label><select id="dd" required>${o(ALLD,'','বেছে নিন')}</select><label for="dt">তারিখ</label><input id="dt" type="date" max="${today}" required><button class="btn" type="submit">যোগ করুন</button></form></details><p class="note">এটা আপনার নিজের লেখা তথ্য। অন্যরা শুধু মোট সংখ্যা ও দানস্থলের সংখ্যা দেখতে পায়, হাসপাতালের নাম বা তারিখ নয়।</p></div>`;
-async function render(){if(CFG.apiKey.startsWith('PASTE')){$('#app').innerHTML='<p class="em">Firebase কনফিগ এখনো বসানো হয়নি। index.html এর ওপরের CFG অংশে আপনার মান বসান।</p>';return}const f={home,search,register,login,request,me,admin,donor:()=>pDonor(cur.p)}[cur.r]||home;let h;
+const CEN={"ঢাকা":[23.81,90.41],"গাজীপুর":[23.99,90.42],"নারায়ণগঞ্জ":[23.62,90.5],"নরসিংদী":[23.92,90.72],"মানিকগঞ্জ":[23.86,90.0],"মুন্সিগঞ্জ":[23.55,90.53],"কিশোরগঞ্জ":[24.43,90.78],"টাঙ্গাইল":[24.25,89.92],"ফরিদপুর":[23.61,89.84],"মাদারীপুর":[23.17,90.2],"শরীয়তপুর":[23.21,90.35],"রাজবাড়ী":[23.76,89.64],"গোপালগঞ্জ":[23.01,89.83],"চট্টগ্রাম":[22.36,91.78],"কক্সবাজার":[21.45,91.98],"কুমিল্লা":[23.46,91.18],"ব্রাহ্মণবাড়িয়া":[23.97,91.11],"চাঁদপুর":[23.23,90.65],"নোয়াখালী":[22.87,91.1],"ফেনী":[23.02,91.4],"লক্ষ্মীপুর":[22.94,90.84],"খাগড়াছড়ি":[23.12,91.98],"রাঙামাটি":[22.63,92.2],"বান্দরবান":[22.19,92.22],"রাজশাহী":[24.37,88.6],"নাটোর":[24.41,88.99],"নওগাঁ":[24.8,88.93],"চাঁপাইনবাবগঞ্জ":[24.6,88.28],"পাবনা":[24.0,89.23],"বগুড়া":[24.85,89.37],"সিরাজগঞ্জ":[24.45,89.7],"জয়পুরহাট":[25.1,89.02],"খুলনা":[22.82,89.55],"যশোর":[23.17,89.21],"সাতক্ষীরা":[22.72,89.07],"বাগেরহাট":[22.65,89.79],"নড়াইল":[23.17,89.5],"মাগুরা":[23.49,89.42],"ঝিনাইদহ":[23.54,89.17],"কুষ্টিয়া":[23.9,89.12],"চুয়াডাঙ্গা":[23.64,88.85],"মেহেরপুর":[23.76,88.63],"বরিশাল":[22.7,90.37],"পটুয়াখালী":[22.36,90.33],"ভোলা":[22.69,90.65],"পিরোজপুর":[22.58,89.97],"ঝালকাঠি":[22.64,90.2],"বরগুনা":[22.15,90.13],"সিলেট":[24.89,91.87],"মৌলভীবাজার":[24.48,91.77],"হবিগঞ্জ":[24.38,91.42],"সুনামগঞ্জ":[25.07,91.4],"রংপুর":[25.74,89.25],"দিনাজপুর":[25.63,88.64],"কুড়িগ্রাম":[25.81,89.64],"গাইবান্ধা":[25.33,89.53],"লালমনিরহাট":[25.99,89.45],"নীলফামারী":[25.93,88.86],"পঞ্চগড়":[26.34,88.55],"ঠাকুরগাঁও":[26.03,88.46],"ময়মনসিংহ":[24.75,90.41],"জামালপুর":[24.92,89.94],"নেত্রকোণা":[24.88,90.73],"শেরপুর":[25.02,90.02]};
+const CEND={"ঢাকা":[23.81,90.41],"চট্টগ্রাম":[22.36,91.78],"রাজশাহী":[24.37,88.60],"খুলনা":[22.82,89.55],"বরিশাল":[22.70,90.37],"সিলেট":[24.89,91.87],"রংপুর":[25.74,89.25],"ময়মনসিংহ":[24.75,90.41]};
+let MAP=null,LAY=null,PLACES=[],PF='hospital';
+const kindOf=t=>(t.amenity==='blood_bank'||t.healthcare==='blood_bank'||t.healthcare==='blood_donation')?'blood':'hospital';
+const tel=p=>String(p).replace(/[^+\d]/g,'');
+const mapPage=async()=>{PF='hospital';const D=await DB.pub(),cnt={};D.forEach(x=>cnt[x.dv]=(cnt[x.dv]||0)+1);
+return`<h2>বাংলাদেশের মানচিত্র</h2><p class="mu">বিভাগ বা জেলা বেছে হাসপাতাল ও ব্লাড ব্যাংক খুঁজুন</p>
+<div class="dg">${DS.map(k=>`<button class="dc" data-act="mdiv" data-id="${k}"><b>${k}</b><small>${bn(cnt[k]||0)} জন দাতা</small></button>`).join('')}</div>
+<form id="f-m">${loc('m',{},1)}</form>
+<div class="row"><button class="btn" data-act="geo">এলাকা খুঁজুন</button><button class="btn g" data-act="findhere">এই এলাকায় দেখান</button></div>
+<div id="mp"></div>
+<div class="tabs2"><button class="on" data-act="ptab" data-id="hospital">হাসপাতাল</button><button data-act="ptab" data-id="blood">ব্লাড ব্যাংক</button></div>
+<div id="pl"><p class="em">জেলা বেছে নিন, অথবা মানচিত্র জুম করে “এই এলাকায় দেখান” চাপুন।</p></div>
+<p class="note">তথ্য OpenStreetMap থেকে আসে। ফোন নম্বর বা ঠিকানা পুরনো হতে পারে, যাওয়ার আগে ফোন করে নিশ্চিত হোন। ব্লাড ব্যাংকের তথ্য কম থাকতে পারে।</p>`};
+function initMap(){const el=$('#mp');if(!el)return;
+if(!window.L){el.innerHTML='<p class="em">মানচিত্র লোড হয়নি। ইন্টারনেট দেখে পাতা রিফ্রেশ করুন।</p>';return}
+if(MAP){try{MAP.remove()}catch(e){}MAP=null}
+MAP=L.map(el).setView([23.8,90.35],7);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap'}).addTo(MAP);
+LAY=L.layerGroup().addTo(MAP);drawPlaces();renderList()}
+function drawPlaces(){if(!MAP||!LAY)return;LAY.clearLayers();
+PLACES.filter(p=>p.k===PF).forEach(p=>{const ic=L.divIcon({className:'',html:`<div class="pin ${p.k}">${p.k==='blood'?'💧':'+'}</div>`,iconSize:[30,30],iconAnchor:[15,15]});
+L.marker([p.la,p.lo],{icon:ic}).addTo(LAY).bindPopup(`<b>${E(p.n)}</b>${p.ad?'<br>'+E(p.ad):''}${p.ph?'<br><a href="tel:'+E(tel(p.ph))+'">'+E(p.ph)+'</a>':''}`)})}
+function renderList(){const el=$('#pl');if(!el||!PLACES.length)return;const L2=PLACES.filter(p=>p.k===PF);
+el.innerHTML=L2.length?L2.slice(0,60).map(p=>`<div class="c"><span class="b2 ${p.k}">${p.k==='blood'?'💧':'+'}</span><div class="i"><b>${E(p.n)}</b>${p.ad?`<small>${E(p.ad)}</small>`:''}<small>${p.ph?E(p.ph):'ফোন নম্বর নেই'}</small></div><div class="act">${p.ph?`<a class="call" href="tel:${E(tel(p.ph))}">কল</a>`:''}<a class="call n" href="https://www.google.com/maps/dir/?api=1&destination=${p.la},${p.lo}" target="_blank" rel="noopener">পথ</a></div></div>`).join(''):`<p class="em">এই এলাকায় ${PF==='blood'?'ব্লাড ব্যাংক':'হাসপাতাল'} পাওয়া যায়নি। মানচিত্র সরিয়ে বা জুম আউট করে আবার চেষ্টা করুন।</p>`}
+async function findHere(){if(!MAP)return toast('মানচিত্র লোড হয়নি');
+if(MAP.getZoom()<10)return toast('আরও জুম করুন বা জেলা বেছে নিন');
+const b=MAP.getBounds(),bb=[b.getSouth(),b.getWest(),b.getNorth(),b.getEast()].map(v=>v.toFixed(5)).join(',');
+const q=`[out:json][timeout:25];(nwr["amenity"="hospital"](${bb});nwr["amenity"="blood_bank"](${bb});nwr["healthcare"="blood_bank"](${bb});nwr["healthcare"="blood_donation"](${bb}););out center 150;`;
+$('#pl').innerHTML='<p class="em">খোঁজা হচ্ছে…</p>';
+let j=null;for(const u of ['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter']){try{const r=await fetch(u+'?data='+encodeURIComponent(q));if(r.ok){j=await r.json();break}}catch(e){}}
+if(!j){$('#pl').innerHTML='<p class="em">তথ্য আনা যায়নি। একটু পরে আবার চেষ্টা করুন।</p>';return}
+PLACES=j.elements.map(e=>{const t=e.tags||{};return{id:e.type+e.id,k:kindOf(t),n:t['name:bn']||t.name||'নামহীন',ph:(t.phone||t['contact:phone']||'').split(';')[0].trim(),ad:t['addr:full']||[t['addr:street'],t['addr:city']].filter(Boolean).join(', '),la:e.lat!=null?e.lat:(e.center&&e.center.lat),lo:e.lon!=null?e.lon:(e.center&&e.center.lon)}}).filter(p=>p.la!=null);
+drawPlaces();renderList()}
+async function geo(){if(!MAP)return toast('মানচিত্র লোড হয়নি');const u=V('mu'),d=V('md'),dv=V('mdv');
+if(!u&&!d&&!dv)return toast('বিভাগ, জেলা বা উপজেলা দিন');
+const q=[u,d,(dv&&!d)?dv+' বিভাগ':''].filter(Boolean).join(', ')+', বাংলাদেশ';
+try{const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&accept-language=bn&countrycodes=bd&q='+encodeURIComponent(q));const j=await r.json();
+if(!j.length)return toast('এলাকা খুঁজে পাওয়া যায়নি');const b=j[0].boundingbox;MAP.fitBounds([[+b[0],+b[2]],[+b[1],+b[3]]]);await findHere()}catch(e){toast('এলাকা খোঁজা যায়নি, একটু পরে চেষ্টা করুন')}}
+async function render(){if(CFG.apiKey.startsWith('PASTE')){$('#app').innerHTML='<p class="em">Firebase কনফিগ এখনো বসানো হয়নি। index.html এর ওপরের CFG অংশে আপনার মান বসান।</p>';return}const f={home,map:mapPage,search,register,login,request,me,admin,donor:()=>pDonor(cur.p)}[cur.r]||home;let h;
 try{h=await f()}catch(x){h='<p class="em">কিছু ভুল হয়েছে। আবার চেষ্টা করুন।</p>'}
 $('#app').innerHTML=h;$('#bk').hidden=!stack.length;$('#hl').textContent=sess()?'আমার':'প্রবেশ';$('#hl').dataset.go=sess()?'me':'login';
 document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.go===cur.r));
-if(cur.r==='search')res();window.scrollTo(0,0)}
+if(cur.r==='search')res();if(cur.r==='map')initMap();window.scrollTo(0,0)}
 let tm;function toast(m){const t=$('#t');t.textContent=m;t.classList.add('show');clearTimeout(tm);tm=setTimeout(()=>t.classList.remove('show'),3200)}
 const reset=r=>{stack=[];cur={r};render()};
 document.addEventListener('click',async ev=>{const a=ev.target.closest('[data-go],[data-act]');if(!a)return;ev.preventDefault();const d=a.dataset,id=d.id;try{
@@ -219,6 +273,10 @@ if(d.go){if(d.root!==undefined)stack=[];return go(d.go,d.p)}
 const u=sess();
 if(d.act==='bk'){cur=stack.pop()||{r:'home'};return render()}
 if(d.act==='google'){await signInWithPopup(auth,new GoogleAuthProvider());const g=await DB.get('donors',sess());return reset(g?'me':'register')}
+if(d.act==='mdiv'){const sl=$('#mdv');sl.value=id;sl.dispatchEvent(new Event('change',{bubbles:true}));return}
+if(d.act==='findhere'){await findHere();return}
+if(d.act==='geo'){await geo();return}
+if(d.act==='ptab'){PF=id;document.querySelectorAll('.tabs2 button').forEach(b=>b.classList.toggle('on',b.dataset.id===PF));drawPlaces();renderList();return}
 if(d.act==='card'){const cx=await DB.get('donors',sess());if(cx)await shareCard(cx);return}
 if(d.act==='deldon'){await DB.del('donations',id);await sync(sess());toast('মুছে ফেলা হয়েছে')}
 if(d.act==='out'){await signOut(auth);return reset('home')}
@@ -232,6 +290,8 @@ render()}catch(x){toast('ব্যর্থ হয়েছে: '+(x.code||x.mes
 document.addEventListener('change',async ev=>{const t=ev.target;
 if(t.dataset.dv!==undefined){const s=$('#'+t.dataset.dv+'d'),any=s.options[0].textContent.startsWith('সব');s.innerHTML=o(t.value?DIV[t.value]:(any?ALLD:[]),'',any?'সব জেলা':'বেছে নিন')}
 if(t.dataset.pv){const c=t.dataset.pv==='sp'?'donorsPrivate':'donors',x=await DB.get(c,sess());x[t.dataset.pv]=t.checked;await DB.put(c,x);toast('সেটিং সংরক্ষিত হয়েছে')}
+if(MAP&&t.id==='mdv'&&t.value&&CEND[t.value])MAP.setView(CEND[t.value],9,{animate:false});
+if(MAP&&t.id==='md'&&t.value&&CEN[t.value]){MAP.setView(CEN[t.value],10,{animate:false});findHere()}
 if(t.closest('#f-s'))res()});
 document.addEventListener('input',ev=>{if(ev.target.id==='su')res()});
 document.addEventListener('submit',async ev=>{ev.preventDefault();const f=ev.target.id;try{
