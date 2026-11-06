@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>রক্তবন্ধু বাংলাদেশ</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<meta name="theme-color" content="#c8102e">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap">
+<style>
+:root{--bg:#f6faf7;--cd:#fff;--tx:#17251e;--mu:#5d6f66;--rd:#c8102e;--rd2:#9f0c24;--rdt:#c8102e;--gr:#00704a;--gr2:#005a3b;--okt:#00704a;--ln:#dbe6df;--wn:#9a5b00;--on:#fff;--sf:#e8f3ec;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a15;--cd:#18261f;--tx:#eaf3ee;--mu:#9bb0a5;--rd:#d72f4b;--rd2:#b92740;--rdt:#ff7389;--gr:#178a5b;--gr2:#117a4f;--okt:#5fd7a4;--ln:#2b3d34;--wn:#f0a94a;--sf:#1d2f26;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1a15;--cd:#18261f;--tx:#eaf3ee;--mu:#9bb0a5;--rd:#d72f4b;--rd2:#b92740;--rdt:#ff7389;--gr:#178a5b;--gr2:#117a4f;--okt:#5fd7a4;--ln:#2b3d34;--wn:#f0a94a;--sf:#1d2f26;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.6 "Hind Siliguri","Noto Sans Bengali",sans-serif}
+.w{max-width:720px;margin:0 auto;padding:0 16px}
+.dm{background:var(--sf);color:var(--okt);border-bottom:1px solid var(--ln);font-size:13px;padding:6px 16px;text-align:center}
+.hd{display:flex;align-items:center;gap:8px;padding:12px 0}
+.lg{flex:1;display:flex;align-items:center;gap:8px;font-weight:700;font-size:19px;color:var(--rdt)}
+.lg svg{width:30px;height:30px}
+button,a.btn{font-family:inherit}
+.sm{min-height:40px;padding:0 12px;border:1px solid var(--ln);background:var(--cd);color:var(--tx);border-radius:10px;font:600 14px inherit;font-family:inherit;cursor:pointer}
+#app{padding-bottom:96px;min-height:70vh}
+h2{margin:8px 0 4px;font-size:23px;line-height:1.3}
+.mu{color:var(--mu)}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;margin-top:10px;padding:0 16px;border:0;border-radius:12px;background:var(--rd);color:var(--on);font:700 17px inherit;font-family:inherit;text-decoration:none;cursor:pointer}
+.btn:active{background:var(--rd2)}
+.btn.g{background:var(--gr)}.btn.g:active{background:var(--gr2)}
+.btn.o{background:transparent;color:var(--tx);border:1.5px solid var(--ln)}
+.btn.big{min-height:60px;font-size:21px}
+.hero{text-align:center;padding:24px 8px 8px}
+.hero svg{width:84px;height:84px}
+.hero h1{margin:6px 0 2px;font-size:32px;color:var(--rdt);line-height:1.2}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{display:block;font-weight:600;font-size:14px;margin:12px 0 4px}
+label.ck{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:15px;min-height:40px;margin:10px 0}
+label.ck input{width:22px;height:22px;min-height:0;margin-top:2px;flex:none;accent-color:var(--gr)}
+input,select,textarea{width:100%;min-height:46px;padding:9px 12px;border:1px solid var(--ln);border-radius:10px;background:var(--cd);color:var(--tx);font:16px inherit;font-family:inherit}
+textarea{min-height:70px}
+:focus-visible{outline:3px solid var(--gr);outline-offset:2px}
+.c{display:flex;gap:12px;align-items:center;background:var(--cd);border:1px solid var(--ln);border-radius:14px;padding:12px;margin-top:10px;color:inherit;text-decoration:none}
+.b{flex:none;width:46px;height:46px;border-radius:50% 0 50% 50%;transform:rotate(-45deg);background:var(--rd);color:var(--on);display:grid;place-items:center;margin:4px 6px 0 4px}
+.b i{transform:rotate(45deg);font:700 16px/1 inherit;font-family:inherit;font-style:normal}
+.i{flex:1;min-width:0;display:flex;flex-direction:column}
+.i small{color:var(--mu);font-size:14px;overflow-wrap:anywhere}
+.i small.s-ok{color:var(--okt);font-weight:600}.i small.s-w{color:var(--wn);font-weight:600}
+.tg{font-style:normal;font-size:12px;font-weight:600;background:var(--sf);color:var(--okt);border-radius:6px;padding:1px 6px;margin-left:6px}
+.em{text-align:center;color:var(--mu);padding:26px 12px;border:1px dashed var(--ln);border-radius:14px;margin-top:14px}
+.box{background:var(--cd);border:1px solid var(--ln);border-radius:14px;padding:4px 14px 14px;margin-top:14px}
+.box h3{margin:12px 0 4px;font-size:17px}
+summary{min-height:46px;display:flex;align-items:center;font-weight:700;color:var(--rdt);cursor:pointer}
+ul{margin:6px 0;padding-left:20px}
+.note{color:var(--mu);font-size:13px;margin-top:16px}
+.kv{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--ln)}
+#nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--cd);border-top:1px solid var(--ln);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));z-index:5}
+#nav button{flex:1;min-height:46px;border:0;background:transparent;color:var(--mu);font:600 14px inherit;font-family:inherit;border-radius:10px;cursor:pointer}
+#nav button.on{color:var(--rdt);background:var(--sf)}
+#t{position:fixed;left:50%;bottom:calc(76px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:24px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20;max-width:92%;text-align:center}
+#t.show{opacity:1}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){#t{transition:none}}
+.hero2{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#c8102e,#8e0e24);color:#fff;border-radius:22px;padding:22px 20px;margin-top:6px}.hero2 h2{margin:0;font-size:28px;line-height:1.3;flex:1}.hero2 svg{width:96px;height:96px;flex:none}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}.tile{display:flex;flex-direction:column;gap:4px;background:var(--cd);border:1px solid var(--ln);border-radius:18px;padding:16px;color:var(--tx);text-decoration:none;min-height:130px}.tile .ti{font-size:34px;line-height:1}.tile b{font-size:18px}.tile small{color:var(--mu);font-size:14px}
+.sec{display:flex;justify-content:space-between;align-items:center;margin-top:22px}.sec h3{margin:0;font-size:19px}.sec a{color:var(--rdt);text-decoration:none;font-weight:600}
+.av{width:52px;height:52px;border-radius:50%;object-fit:cover;flex:none}
+.dg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}.dc{border:1px solid var(--ln);background:var(--cd);color:var(--tx);border-radius:12px;padding:8px 4px;font-family:inherit;display:flex;flex-direction:column;align-items:center;cursor:pointer;min-height:58px;font-size:15px}.dc small{color:var(--mu);font-size:12px}
+#mp{height:380px;border-radius:16px;margin:14px 0;position:relative;z-index:0;border:1px solid var(--ln);background:var(--sf)}
+.tabs2{display:flex;gap:8px;margin:6px 0}.tabs2 button{flex:1;min-height:44px;border:1px solid var(--ln);background:var(--cd);color:var(--tx);border-radius:12px;font:600 16px inherit;font-family:inherit;cursor:pointer}.tabs2 button.on{background:var(--rd);color:var(--on);border-color:var(--rd)}
+.pin{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font:700 20px/1 sans-serif;border:2px solid #fff;box-shadow:0 1px 4px #0006}.pin.hospital{background:#c8102e}.pin.blood{background:#00704a;font-size:15px}
+.b2{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:#fff;font:700 24px/1 sans-serif}.b2.hospital{background:var(--rd)}.b2.blood{background:var(--gr);font-size:18px}
+.call.n{background:var(--gr2)}
+#nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:12px;min-height:54px}#nav svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mi{display:flex;align-items:center;gap:14px;background:var(--cd);border:1px solid var(--ln);border-radius:16px;padding:14px;margin-top:12px;color:var(--tx);text-decoration:none}
+.mi .ic{flex:none;width:48px;height:48px;border-radius:12px;background:var(--sf);display:grid;place-items:center}
+.mi .ic svg{width:26px;height:26px;stroke:var(--rdt);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.mi .tx{flex:1;display:flex;flex-direction:column;line-height:1.35}.mi small{color:var(--mu);font-size:14px}.mi .ch{color:var(--mu);font-size:28px}
+</style>
+</head>
+<body>
+<div class="w">
+<header class="hd"><button id="bk" class="sm" data-act="bk" hidden>← ফিরুন</button>
+<div class="lg"><svg viewBox="0 0 256 256" aria-hidden="true"><defs><linearGradient id="lgg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ef2a4a"/><stop offset="1" stop-color="#a30b24"/></linearGradient></defs><path d="M34 168C36 218 82 246 128 246C96 232 68 208 56 172Z" fill="#c8102e"/><path d="M222 168C220 218 174 246 128 246C160 232 188 208 200 172Z" fill="#c8102e"/><path d="M128 14C128 14 52 98 52 156a76 76 0 0 0 152 0C204 98 128 14 128 14Z" fill="url(#lgg)"/><path d="M128 192C92 168 78 150 78 130C78 114 90 104 104 104C114 104 123 109 128 118C133 109 142 104 152 104C166 104 178 114 178 130C178 150 164 168 128 192Z" fill="#fff"/></svg><span>রক্তবন্ধু বাংলাদেশ</span></div>
+<button id="hl" class="sm" data-go="login">প্রবেশ</button></header>
+<main id="app"></main>
+</div>
+<nav id="nav"><button data-go="home" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg><span>হোম</span></button><button data-go="map" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg><span>ম্যাপ</span></button><button data-go="search" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.2c3 .2 5 2.4 5 5.8"/></svg><span>দাতা</span></button><button data-go="request" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 01-12 0c0-4.5 6-11 6-11z"/><path d="M12 11v5M9.5 13.5h5"/></svg><span>জরুরি</span></button><button data-go="me" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg><span>প্রোফাইল</span></button></nav>
+<div id="t" role="status"></div>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import{getAuth,RecaptchaVerifier,signInWithPhoneNumber,onAuthStateChanged,signOut,GoogleAuthProvider,signInWithPopup,deleteUser,reauthenticateWithPopup,createUserWithEmailAndPassword,signInWithEmailAndPassword,EmailAuthProvider,reauthenticateWithCredential,sendPasswordResetEmail,verifyBeforeUpdateEmail}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import{getFirestore,collection,getDocs,doc,getDoc,setDoc,deleteDoc,query,where}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+/* Firebase Console থেকে পাওয়া মানগুলো এখানে বসান */
+const CFG={apiKey:"AIzaSyCvfYlmg7_UDnDk5HY4jR_k-nMDuzrdV_g",authDomain:"roktobondhu-ca076.firebaseapp.com",projectId:"roktobondhu-ca076",storageBucket:"roktobondhu-ca076.firebasestorage.app",messagingSenderId:"1094106020636",appId:"1:1094106020636:web:005ea987f32c1f75a118d9"};
+const app=initializeApp(CFG),auth=getAuth(app),fs=getFirestore(app);
+auth.languageCode='bn';
+/* নোট (পুরনো পরিকল্পনা):
+   - Auth: Firebase Phone Auth। sess() কে onAuthStateChanged দিয়ে বদলান, uid = donors/{uid}।
+   - DB: নিচের all/get/put/del চারটি মেথড Firestore দিয়ে বদলান (collection: donors, requests, creq, reps)।
+   - গোপনীয়তা: সার্চযোগ্য donors ডকুমেন্টে ফোন রাখবেন না। ফোন আলাদা private ডকুমেন্টে রাখুন, শুধু মালিক ও অনুমতিপ্রাপ্তরা পড়বে।
+   - অ্যাডমিন: custom claim (admin:true)। রিপোর্ট ও স্থগিতের কাজ Rules দিয়ে সীমিত করুন। */
+const G=["A+","A-","B+","B-","O+","O-","AB+","AB-"];
+const DIV={"ঢাকা":["ঢাকা","গাজীপুর","নারায়ণগঞ্জ","নরসিংদী","মানিকগঞ্জ","মুন্সিগঞ্জ","কিশোরগঞ্জ","টাঙ্গাইল","ফরিদপুর","মাদারীপুর","শরীয়তপুর","রাজবাড়ী","গোপালগঞ্জ"],"চট্টগ্রাম":["চট্টগ্রাম","কক্সবাজার","কুমিল্লা","ব্রাহ্মণবাড়িয়া","চাঁদপুর","নোয়াখালী","ফেনী","লক্ষ্মীপুর","খাগড়াছড়ি","রাঙামাটি","বান্দরবান"],"রাজশাহী":["রাজশাহী","নাটোর","নওগাঁ","চাঁপাইনবাবগঞ্জ","পাবনা","বগুড়া","সিরাজগঞ্জ","জয়পুরহাট"],"খুলনা":["খুলনা","যশোর","সাতক্ষীরা","বাগেরহাট","নড়াইল","মাগুরা","ঝিনাইদহ","কুষ্টিয়া","চুয়াডাঙ্গা","মেহেরপুর"],"বরিশাল":["বরিশাল","পটুয়াখালী","ভোলা","পিরোজপুর","ঝালকাঠি","বরগুনা"],"সিলেট":["সিলেট","মৌলভীবাজার","হবিগঞ্জ","সুনামগঞ্জ"],"রংপুর":["রংপুর","দিনাজপুর","কুড়িগ্রাম","গাইবান্ধা","লালমনিরহাট","নীলফামারী","পঞ্চগড়","ঠাকুরগাঁও"],"ময়মনসিংহ":["ময়মনসিংহ","জামালপুর","নেত্রকোণা","শেরপুর"]};
+const DS=Object.keys(DIV),ALLD=DS.flatMap(k=>DIV[k]),dvOf=d=>DS.find(k=>DIV[k].includes(d))||'';
+const URG=["অতি জরুরি (আজই)","২৪ ঘণ্টার মধ্যে","২–৩ দিনের মধ্যে"];
+const WHY=["ভুয়া বা মিথ্যা তথ্য","বিরক্ত বা হয়রানি করেছে","টাকা চেয়েছে","অন্য কারণ"];
+const $=s=>document.querySelector(s),V=i=>$('#'+i).value.trim();
+const E=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const bn=n=>String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
+const o=(a,v,f)=>(f!=null?`<option value="">${f}</option>`:'')+a.map(x=>`<option${x===v?' selected':''}>${x}</option>`).join('');
+const ph=v=>v.replace(/[০-৯]/g,c=>'০১২৩৪৫৬৭৮৯'.indexOf(c)).replace(/[\s-]/g,'').replace(/^\+?88/,'');
+const okp=p=>/^01[3-9]\d{8}$/.test(p);
+const uid=()=>'u'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const today=new Date().toISOString().slice(0,10);
+const mem={};
+const rd=k=>{try{return JSON.parse(localStorage.getItem(k))}catch(x){return mem[k]}};
+const wr=(k,v)=>{mem[k]=v;try{localStorage.setItem(k,JSON.stringify(v))}catch(x){}};
+const cv=d=>({id:d.id,...d.data()});
+const DB={async all(c){return(await getDocs(collection(fs,c))).docs.map(cv)},
+async pub(){return(await getDocs(query(collection(fs,'donors'),where('hid','==',false),where('sus','==',false)))).docs.map(cv)},
+async q(c,k,v){return(await getDocs(query(collection(fs,c),where(k,'==',v)))).docs.map(cv)},
+async get(c,id){try{const r=await getDoc(doc(fs,c,id));return r.exists()?cv(r):null}catch(x){return null}},
+async put(c,x){const{id,...r}=x;await setDoc(doc(fs,c,id),r);return x},
+async del(c,id){await deleteDoc(doc(fs,c,id))}};
+let ADM=false;const sess=()=>auth.currentUser?auth.currentUser.uid:null,isAdm=()=>ADM;
+const wait=d=>d.nx?Math.max(0,Math.ceil((new Date(d.nx)-Date.now())/864e5)):0;
+const nxOf=ld=>{if(!ld)return'';const d=new Date(ld);d.setDate(d.getDate()+120);const e=new Date(d.getFullYear(),d.getMonth()+1,0);return e.getFullYear()+'-'+String(e.getMonth()+1).padStart(2,'0')+'-'+String(e.getDate()).padStart(2,'0')};
+const st=d=>!d.av?['s-no','এখন দিতে অনিচ্ছুক']:wait(d)?['s-w','এখন প্রস্তুত নয়']:['s-ok','রক্ত দিতে প্রস্তুত'];
+function seed(){if(rd('rb2_seed'))return;
+const L=[["ঢাকা","ঢাকা","মিরপুর"],["চট্টগ্রাম","চট্টগ্রাম","পাহাড়তলী"],["রাজশাহী","রাজশাহী","বোয়ালিয়া"],["খুলনা","খুলনা","সোনাডাঙ্গা"],["সিলেট","সিলেট","জালালাবাদ"],["বরিশাল","বরিশাল","কাউনিয়া"],["রংপুর","রংপুর","তাজহাট"],["ময়মনসিংহ","ময়মনসিংহ","মুক্তাগাছা"]];
+const ago=n=>new Date(Date.now()-n*864e5).toISOString().slice(0,10);
+wr('rb2_donors',Array.from({length:16},(_,i)=>{const l=L[(i+(i>7?1:0))%8];return{id:'demo'+i,demo:true,n:'ডেমো দাতা '+bn(i+1),g:G[i%8],dv:l[0],d:l[1],u:l[2],p:'017000000'+(10+i),ld:i%4===1?ago(40):i%4===2?'':ago(200+i),av:i!==5&&i!==11,sp:false,hid:false,sus:false,shared:[]}}));wr('rb2_seed',1)}
+const loc=(p,v={},any)=>{const dv=v.dv||'';return`<div class="row"><div><label for="${p}dv">বিভাগ</label><select id="${p}dv" data-dv="${p}"${any?'':' required'}>${o(DS,dv,any?'সব বিভাগ':'বেছে নিন')}</select></div><div><label for="${p}d">জেলা</label><select id="${p}d"${any?'':' required'}>${o(dv?DIV[dv]:(any?ALLD:[]),v.d,any?'সব জেলা':'বেছে নিন')}</select></div></div><label for="${p}u">উপজেলা${any?' (ঐচ্ছিক)':''}</label><input id="${p}u" value="${E(v.u||'')}" placeholder="যেমন: মিরপুর"${any?'':' required'}>`};
+const dloc=x=>`<label for="fd">জেলা</label><select id="fd" required><option value="">বেছে নিন</option>${DS.map(v=>`<optgroup label="${v} বিভাগ">${DIV[v].map(d=>`<option${d===x.d?' selected':''}>${d}</option>`).join('')}</optgroup>`).join('')}</select><label for="fu">উপজেলা (ঐচ্ছিক)</label><input id="fu" value="${E(x.u||'')}" placeholder="যেমন: মিরপুর">`;
+const pf=(x={})=>`<label for="fn">পূর্ণ নাম</label><input id="fn" value="${E(x.n||'')}" autocomplete="name" required>
+<label for="fg">রক্তের গ্রুপ</label><select id="fg" required>${o(G,x.g,'বেছে নিন')}</select>${dloc(x)}
+<label for="fp">মোবাইল নম্বর (আপনার অনুমতি ছাড়া দেখানো হবে না)</label><input id="fp" type="tel" inputmode="numeric" value="${E(x.p||'')}" placeholder="01712345678" required>
+${x.reg?'':`<label for="fl">সর্বশেষ রক্ত দেওয়ার তারিখ (না দিলে ফাঁকা রাখুন)</label><input id="fl" type="date" max="${today}" value="${x.ld||''}">`}
+<label class="ck"><input id="fa" type="checkbox"${x.av!==false?' checked':''}> আমি এখন রক্ত দিতে ইচ্ছুক</label>${auth.currentUser&&auth.currentUser.photoURL?`<label class="ck"><input id="fph" type="checkbox"${x.ph?' checked':''}> প্রোফাইলে ও শেয়ার কার্ডে আমার গুগল ছবি দেখান</label>`:''}`;
+const card=x=>{const s=st(x);return`<a class="c" href="#" data-go="donor" data-p="${x.id}">${x.ph?`<img class="av" src="${E(x.ph)}" alt="" referrerpolicy="no-referrer">`:''}<span class="b"><i>${E(x.g)}</i></span><div class="i"><b>${E(x.n)}${x.demo?'<em class="tg">ডেমো</em>':''}</b><small>${E(x.u?x.u+', '+x.d:x.d)}, ${E(x.dv)} বিভাগ</small>${x.dn?`<small>রক্তদান: ${bn(x.dn)} বার</small>`:''}<small class="${s[0]}">${s[1]}</small></div></a>`};
+let cur={r:'home'},stack=[];
+function go(r,p){stack.push(cur);cur={r,p};render()}
+const home=async()=>{const Q=(await DB.all('requests')).filter(x=>x.open).sort((a,b)=>b.ts-a.ts).slice(0,3);
+return`<div class="hero2"><h2>এক ফোঁটা রক্ত<br>বাঁচাতে পারে<br>একটি জীবন</h2><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2C16 2 6 14 6 20a10 10 0 0020 0C26 14 16 2 16 2z" fill="#fff"/><path d="M16 14v8M12 18h8" stroke="#c8102e" stroke-width="2.4" stroke-linecap="round"/></svg></div>
+<div class="tiles">
+<a class="tile" href="#" data-go="map"><span class="ti">🗺️</span><b>বাংলাদেশের ম্যাপ</b><small>বিভাগ, জেলা ও উপজেলা অনুযায়ী খুঁজুন</small></a>
+<a class="tile" href="#" data-go="search"><span class="ti">🩸</span><b>রক্তদাতা খুঁজুন</b><small>আপনার এলাকার দাতাদের তালিকা</small></a>
+<a class="tile" href="#" data-go="map"><span class="ti">🏥</span><b>হাসপাতাল ও ব্লাড ব্যাংক</b><small>ঠিকানা, যোগাযোগ ও পথ</small></a>
+<a class="tile" href="#" data-go="me"><span class="ti">👤</span><b>আমার প্রোফাইল</b><small>রক্তদানের ইতিহাস ও শেয়ার</small></a></div>
+<div class="sec"><h3>সাম্প্রতিক আপডেট</h3><a href="#" data-go="request">সকল দেখুন →</a></div>
+${Q.length?Q.map(x=>`<a class="c" href="#" data-go="request"><span class="b"><i>${E(x.g)}</i></span><div class="i"><b>${bn(x.b)} ব্যাগ রক্ত লাগবে</b><small>${E(x.h)}, ${E(x.d)}</small><small class="s-w">${E(x.urg)}</small></div></a>`).join(''):'<p class="em">এখন কোনো চলমান অনুরোধ নেই।</p>'}
+${sess()?'':'<a class="btn o" href="#" data-go="register">দাতা হিসেবে নিবন্ধন করুন</a>'}
+${isAdm()?`<p class="note"><a href="#" data-go="admin" style="color:inherit">অ্যাডমিন</a></p>`:''}`};
+const search=async()=>{if(!sess()){NEXT='search';return login()}return`<h2>রক্তদাতা খুঁজুন</h2><form id="f-s"><label for="sg">রক্তের গ্রুপ</label><select id="sg">${o(G,'','সব গ্রুপ')}</select>${loc('s',{},1)}</form><div id="rs"></div>`};
+async function res(){const g=V('sg'),dv=V('sdv'),d=V('sd'),u=V('su');
+const L=(await DB.pub()).filter(x=>!x.hid&&!x.sus&&(!g||x.g===g)&&(!dv||x.dv===dv)&&(!d||x.d===d)&&(!u||x.u.includes(u)));
+L.sort((a,b)=>(st(a)[0]==='s-ok'?0:1)-(st(b)[0]==='s-ok'?0:1));
+$('#rs').innerHTML=`<p class="mu">${bn(L.length)} জন পাওয়া গেছে</p>`+(L.length?L.map(card).join(''):'<p class="em">কোনো দাতা পাওয়া যায়নি। গ্রুপ বা এলাকা বদলে দেখুন।</p>')}
+async function pDonor(id){const x=await DB.get('donors',id);if(!x||x.sus)return'<p class="em">প্রোফাইল পাওয়া যায়নি।</p>';
+const me=sess(),s=st(x);let ct;
+if(x.id===me)ct='<p class="mu">এটি আপনার নিজের প্রোফাইল।</p>';
+else if(!me)ct='<p class="mu">যোগাযোগের অনুরোধ পাঠাতে <a href="#" data-go="login">প্রবেশ করুন</a>।</p>';
+else{const pv=await DB.get('donorsPrivate',id);if(pv&&pv.p)ct=`<a class="btn g" href="tel:${E(pv.p)}">কল করুন: ${E(pv.p)}</a>`;else{const sent=await DB.get('creq',me+'_'+id);ct=sent?'<p class="mu">অনুরোধ পাঠানো হয়েছে। দাতা অনুমতি দিলে নম্বর এখানে দেখা যাবে।</p>':`<button class="btn g" data-act="creq" data-id="${x.id}">যোগাযোগের অনুরোধ পাঠান</button>`}}
+return`${x.ph?`<img src="${E(x.ph)}" alt="" referrerpolicy="no-referrer" style="width:96px;height:96px;border-radius:50%;object-fit:cover;display:block;margin-top:8px">`:''}<h2>${E(x.n)}${x.demo?'<em class="tg">ডেমো</em>':''}</h2>
+<div class="box"><div class="kv"><span>রক্তের গ্রুপ</span><b>${E(x.g)}</b></div><div class="kv"><span>এলাকা</span><b>${E(x.u?x.u+', '+x.d:x.d)}</b></div><div class="kv"><span>বিভাগ</span><b>${E(x.dv)}</b></div><div class="kv"><span>অবস্থা</span><b class="${s[0]}">${s[1]}</b></div>${x.dn?`<div class="kv"><span>মোট রক্তদান</span><b>${bn(x.dn)} বার</b></div><div class="kv"><span>দানস্থল</span><b>${bn(x.dp||0)}টি</b></div>`:''}</div>
+${x.demo?'<p class="note">এটি ডেমো প্রোফাইল, বাস্তব মানুষ নয়।</p>':''}${ct}
+<details class="box"><summary>এই প্রোফাইল রিপোর্ট করুন</summary><form id="f-rep" data-id="${x.id}"><label for="rr">কারণ</label><select id="rr" required>${o(WHY,'','বেছে নিন')}</select><label for="rt">বিস্তারিত (ঐচ্ছিক)</label><textarea id="rt"></textarea><button class="btn o" type="submit">রিপোর্ট পাঠান</button></form></details>`}
+const register=async()=>{if(!sess())return login(true);if(await DB.get('donors',sess()))return me();return`<h2>দাতা হিসেবে নিবন্ধন</h2><p class="mu">ফোন নম্বর ডিফল্টভাবে লুকানো থাকে, আপনি চাইলে নিচের টিক দিয়ে দেখাতে পারেন। নম্বর যাচাই করা হয় না, তাই সঠিক নম্বর দিন।</p><form id="f-reg">${pf({reg:1,n:auth.currentUser.displayName||'',p:isFake(auth.currentUser.email)?auth.currentUser.email.split('@')[0]:(auth.currentUser.phoneNumber||'').replace('+88','')})}<label class="ck"><input id="fsp" type="checkbox"> প্রবেশ করা সবাইকে আমার ফোন নম্বর দেখান (জরুরিতে সরাসরি কল পাবেন, পরে সেটিং থেকে বদলাতে পারবেন)</label><label class="ck"><input id="fc" type="checkbox" required> আমি জানি আমার গ্রুপ ও এলাকা (উপজেলা পর্যন্ত) সবার সার্চে দেখা যাবে।</label><button class="btn" type="submit">নিবন্ধন করুন</button></form>`};
+const login=async(reg)=>{if(reg)AMODE='up';const up=AMODE==='up';return`<h2>${reg||up?'নতুন নিবন্ধন':'প্রবেশ করুন'}</h2><p class="mu">নিবন্ধন ১ মিনিটে, সম্পূর্ণ বিনামূল্যে।</p><button class="btn big" data-act="google">Google দিয়ে চালিয়ে যান</button><p class="note" style="text-align:center;margin-top:8px">আমরা আপনার গুগল পাসওয়ার্ড পাই না, শুধু নাম ও ইমেইল পাই।</p>
+<p class="mu" style="text-align:center;margin:22px 0 0">অথবা মোবাইল নম্বর ও পাসওয়ার্ড দিয়ে</p>
+<div class="seg"><button data-act="amode" data-v="in" class="${up?'':'on'}">প্রবেশ</button><button data-act="amode" data-v="up" class="${up?'on':''}">নতুন নিবন্ধন</button></div>
+<form id="f-pw"><label for="pn">${up?'মোবাইল নম্বর':'মোবাইল নম্বর বা ইমেইল'}</label><input id="pn" autocomplete="username" required placeholder="01712345678"><label for="pw">পাসওয়ার্ড${up?' (কমপক্ষে ৮ অক্ষর)':''}</label><div style="display:flex;gap:8px"><input id="pw" type="password" autocomplete="${up?'new-password':'current-password'}" minlength="${up?8:6}" required><button type="button" class="sm" data-act="showpw">দেখান</button></div><button class="btn" type="submit">${up?'নিবন্ধন করুন':'প্রবেশ করুন'}</button>${up?'<p class="note">পাসওয়ার্ড লিখে রাখুন। ইমেইল যোগ না করলে ভুলে গেলে অ্যাকাউন্ট ফেরানো যাবে না। ইমেইল পরে প্রোফাইল থেকে যোগ করতে পারবেন।</p>':''}</form>
+${up?'':'<details style="margin-top:10px;border:0;padding:0;background:none"><summary style="font-size:15px;color:var(--mu);font-weight:400;min-height:40px;justify-content:center">পাসওয়ার্ড ভুলে গেছি</summary><form id="f-forgot"><label for="fe">আপনার যুক্ত করা ইমেইল</label><input id="fe" type="email" autocomplete="email" required><button class="btn o" type="submit">রিসেট লিংক পাঠান</button></form></details>'}
+<p class="note">প্রথমবার হলে প্রবেশের পর নিবন্ধনের ফর্ম আসবে। আপনার ফোন নম্বর আপনার অনুমতি ছাড়া কেউ দেখতে পায় না। <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">গোপনীয়তা নীতি</a></p><details style="margin-top:36px;border:0;padding:0;background:none"><summary style="font-size:14px;color:var(--mu);font-weight:400;min-height:36px;justify-content:center">অ্যাডমিন লগইন</summary><form id="f-login"><label for="lp">মোবাইল নম্বর</label><input id="lp" type="tel" inputmode="numeric" placeholder="01712345678" required><button class="btn" type="submit" id="lb">কোড পাঠান</button></form><form id="f-otp" hidden><label for="lo">SMS এ আসা ৬ সংখ্যার কোড</label><input id="lo" inputmode="numeric" maxlength="6" required><button class="btn" type="submit">যাচাই করুন</button></form></details>`};
+const request=async()=>{const me=sess(),A=await DB.all('requests'),L=A.filter(x=>x.open).sort((a,b)=>URG.indexOf(a.urg)-URG.indexOf(b.urg)||b.ts-a.ts);
+return`<h2>জরুরি রক্তের অনুরোধ</h2>
+<details class="box"><summary>নতুন অনুরোধ পোস্ট করুন</summary><form id="f-req"><div class="row"><div><label for="qg">রক্তের গ্রুপ</label><select id="qg" required>${o(G,'','বেছে নিন')}</select></div><div><label for="qb">কত ব্যাগ</label><input id="qb" type="number" min="1" max="20" value="1" required></div></div>${loc('q')}
+<label for="qh">হাসপাতাল</label><input id="qh" required><label for="qurg">কখন লাগবে</label><select id="qurg" required>${o(URG,URG[1])}</select>
+<label for="qn">যোগাযোগকারীর নাম</label><input id="qn" required><label for="qp">যোগাযোগের নম্বর</label><input id="qp" type="tel" inputmode="numeric" placeholder="01712345678" required>
+<label class="ck"><input id="qc" type="checkbox" required> আমি সম্মতি দিচ্ছি, এই নম্বর অনুরোধের সাথে প্রকাশ্যে দেখানো হবে।</label><button class="btn" type="submit">অনুরোধ পোস্ট করুন</button></form></details>`+
+(L.length?L.map(x=>`<div class="c"><span class="b"><i>${E(x.g)}</i></span><div class="i"><b>${bn(x.b)} ব্যাগ রক্ত লাগবে</b><small>${E(x.h)}, ${E(x.u?x.u+', '+x.d:x.d)}</small><small class="s-w">${E(x.urg)}</small><small>${E(x.n)}</small></div><div style="display:flex;flex-direction:column;gap:6px"><a class="sm btn g" style="min-height:42px;margin:0" href="tel:${E(x.p)}">কল</a>${x.by===me||x.by==='anon'||isAdm()?`<button class="sm" data-act="close" data-id="${x.id}">পূরণ হয়েছে</button>`:''}</div></div>`).join(''):'<p class="em">এখন কোনো চলমান অনুরোধ নেই।</p>')+'<p class="note">অনুরোধ পোস্ট করতে প্রবেশ করা লাগবে।</p>'};
+async function ctx(){const u=sess();if(!u)return null;const x=await DB.get('donors',u);if(!x)return null;return{u,x,pv:(await DB.get('donorsPrivate',u))||{}}}
+async function me(){const u=sess();if(!u)return isAdm()?admin():login();const x=await DB.get('donors',u);if(!x)return isAdm()?admin():register();
+const R=(await DB.q('creq','to',u)).filter(r=>r.ok===null),s=st(x);
+const mi=(r,ic,t,sm)=>`<a class="mi" href="#" data-go="${r}"><span class="ic">${ic}</span><span class="tx"><b>${t}</b><small>${sm}</small></span><span class="ch">›</span></a>`;
+return`<h2>প্রোফাইল সেটিংস</h2><p class="mu">আপনার অ্যাকাউন্ট ও তথ্যের নিরাপত্তা নিয়ন্ত্রণ করুন</p>
+<div class="c">${x.ph?`<img class="av" src="${E(x.ph)}" alt="" referrerpolicy="no-referrer">`:''}<span class="b"><i>${E(x.g)}</i></span><div class="i"><b>${E(x.n)}</b><small>${E(x.u?x.u+', '+x.d:x.d)}</small><small class="${s[0]}">${s[1]}</small></div></div>
+<label class="ck"><input type="checkbox" data-pv="av"${x.av!==false?' checked':''}> আমি এখন রক্ত দিতে ইচ্ছুক</label>
+<button class="btn g" data-act="card">প্রোফাইল কার্ড শেয়ার করুন</button>
+${mi('pe','<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>','প্রোফাইল সম্পাদনা','নাম, ছবি, এলাকা, গ্রুপ, ফোন')}${mi('pa','<svg viewBox="0 0 24 24"><circle cx="10" cy="8" r="3.5"/><path d="M3 20c0-3.6 3-6 7-6"/><path d="M18 14v6M15 17h6"/></svg>','অ্যাকাউন্ট সেটিংস','প্রবেশের পদ্ধতি ও অ্যাকাউন্ট')}${mi('ps','<svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5L16 9.5"/></svg>','নিরাপত্তা ও গোপনীয়তা','তথ্য কে দেখতে পাবে')}${mi('pn','<svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 1112 0v5l2 2H4z"/><path d="M10 21h4"/></svg>','নোটিফিকেশন',R.length?bn(R.length)+'টি নতুন অনুরোধ':'যোগাযোগের অনুরোধ')}${mi('pd','<svg viewBox="0 0 24 24"><path d="M12 3s6 6.5 6 11a6 6 0 01-12 0c0-4.5 6-11 6-11z"/></svg>','আমার রক্তদানের তথ্য','ইতিহাস ও রেকর্ড')}${mi('hp','<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 114 2c-.9.6-1.5 1-1.5 2"/><path d="M12 17v.1"/></svg>','সহায়তা ও রিপোর্ট','সমস্যা জানান')}${mi('px','<svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg>','অ্যাকাউন্ট মুছে ফেলা','তথ্য মুছে ফেলুন')}
+<button class="btn o" data-act="out">লগআউট</button>`}
+async function pe(){const c=await ctx();if(!c)return register();return`<h2>প্রোফাইল সম্পাদনা</h2><p class="mu">নাম সার্চে সবাই দেখবে। চাইলে শুধু প্রথম নাম বা ডাকনাম দিন।</p><form id="f-edit" class="box">${pf({...c.x,p:c.pv.p,ld:c.pv.ld||c.x.ld})}<button class="btn" type="submit">সংরক্ষণ করুন</button></form>`}
+async function pa(){const c=await ctx();if(!c)return register();const cu=auth.currentUser,pid=((cu.providerData||[])[0]||{}).providerId,pn0={'google.com':'Google','phone':'মোবাইল নম্বর','password':isFake(cu.email)?'মোবাইল নম্বর ও পাসওয়ার্ড':'ইমেইল ও পাসওয়ার্ড'}[pid]||'অন্য';
+return`<h2>অ্যাকাউন্ট সেটিংস</h2><div class="box"><div class="kv"><span>প্রবেশের পদ্ধতি</span><b>${pn0}</b></div>${cu.email&&!isFake(cu.email)?`<div class="kv"><span>ইমেইল</span><b>${E(cu.email)}</b></div>`:''}<div class="kv"><span>মোবাইল নম্বর</span><b>${E(c.pv.p||'দেওয়া হয়নি')}</b></div><p class="note">এগুলো শুধু আপনি দেখতে পান। নম্বর বদলাতে "প্রোফাইল সম্পাদনা" তে যান।</p></div>${isFake(cu.email)?`<div class="box"><h3>ইমেইল যোগ করুন</h3><p class="mu">ইমেইল যোগ করলে পাসওয়ার্ড ভুললে ফিরে পেতে পারবেন। যোগ হওয়ার পর মোবাইল নম্বরের বদলে ইমেইল দিয়ে প্রবেশ করতে হবে।</p><form id="f-addmail"><label for="am">ইমেইল</label><input id="am" type="email" autocomplete="email" required><button class="btn" type="submit">যাচাইয়ের লিংক পাঠান</button></form></div>`:''}<button class="btn o" data-act="out">লগআউট</button>`}
+async function ps(){const c=await ctx();if(!c)return register();const{x,pv}=c;
+return`<h2>নিরাপত্তা ও গোপনীয়তা</h2><div class="box"><h3>আপনার ফোন নম্বর</h3><label class="ck"><input type="checkbox" data-pv="sp"${pv.sp?' checked':''}> প্রবেশ করা সবাইকে আমার ফোন নম্বর দেখান</label><p class="mu">বন্ধ থাকলে কেউ অনুরোধ পাঠালে আপনি অনুমতি দিলে তবেই নম্বর দেখতে পাবে। চালু রাখলে জরুরিতে সরাসরি কল পাবেন।</p></div>
+<div class="box"><h3>প্রোফাইল</h3><label class="ck"><input type="checkbox" data-pv="hid"${x.hid?' checked':''}> সার্চ থেকে আমার প্রোফাইল লুকান</label><p class="mu">ছবি দেখানো বা না দেখানো "প্রোফাইল সম্পাদনা" থেকে বদলাতে পারবেন।</p></div>
+<div class="box"><h3>কে কী দেখে</h3><div class="kv"><span>প্রবেশ করা সবাই</span><span>নাম, গ্রুপ, উপজেলা ও জেলা, প্রস্তুত কি না${x.ph?', ছবি':''}</span></div><div class="kv"><span>শুধু অনুমতি পেলে</span><span>ফোন নম্বর</span></div><div class="kv"><span>শুধু আপনি</span><span>রক্ত দেওয়ার তারিখ, হাসপাতালের নাম, ইমেইল</span></div></div>`}
+async function pn(){const c=await ctx();if(!c)return register();const R=(await DB.q('creq','to',c.u)).filter(r=>r.ok===null);
+return`<h2>নোটিফিকেশন</h2><div class="box"><h3>যোগাযোগের অনুরোধ</h3>${R.length?R.map(r=>`<div class="kv"><span>${E(r.fromName)}</span><span><button class="sm" data-act="share" data-id="${r.id}">নম্বর দিন</button> <button class="sm" data-act="deny" data-id="${r.id}">না</button></span></div>`).join(''):'<p class="mu">কোনো নতুন অনুরোধ নেই।</p>'}</div><p class="note">অ্যাপ বন্ধ থাকলে নোটিফিকেশন আসার ব্যবস্থা এখনো নেই। মাঝে মাঝে অ্যাপ খুলে এখানে দেখুন।</p>`}
+async function pd(){const c=await ctx();if(!c)return register();const DL=(await DB.q('donations','uid',c.u)).sort((a,b)=>b.dt.localeCompare(a.dt));
+return`<h2>আমার রক্তদানের তথ্য</h2><button class="btn g" data-act="card">প্রোফাইল কার্ড শেয়ার করুন</button>${donBox(c.x,DL)}`}
+const hlp=async()=>`<h2>সহায়তা ও রিপোর্ট</h2><div class="box"><h3>সন্দেহজনক প্রোফাইল</h3><p>কেউ টাকা চাইলে, বিরক্ত করলে বা ভুয়া তথ্য দিলে তার প্রোফাইল খুলে <b>এই প্রোফাইল রিপোর্ট করুন</b> চাপুন। অ্যাডমিন দেখবেন।</p></div><div class="box"><h3>নিরাপদে থাকতে</h3><ul><li>রক্তের জন্য কাউকে টাকা দেবেন না।</li><li>অচেনা কাউকে আপনার ঠিকানা বা ব্যক্তিগত তথ্য দেবেন না।</li><li>জরুরিতে আগে হাসপাতাল বা ব্লাড ব্যাংকে যোগাযোগ করুন।</li></ul></div><a class="btn o" href="#" data-go="search">দাতার তালিকা</a><a class="btn o" href="privacy.html" target="_blank" rel="noopener">গোপনীয়তা নীতি</a>`;
+const px=async()=>`<h2>অ্যাকাউন্ট মুছে ফেলা</h2><div class="box"><p>অ্যাকাউন্ট মুছলে আপনার প্রোফাইল, ফোন নম্বর, রক্তদানের তালিকা আর লগইনের রেকর্ড মুছে যাবে, ফেরত আনা যাবে না। নিরাপত্তার জন্য আবার নিশ্চিত করতে হবে: গুগলে প্রবেশ করে অথবা নিচে পাসওয়ার্ড দিয়ে।</p>${auth.currentUser&&((auth.currentUser.providerData||[])[0]||{}).providerId==='password'?'<label for="dpw">আপনার পাসওয়ার্ড</label><input id="dpw" type="password" autocomplete="current-password">':''}<button class="btn" style="background:#8e0e24" data-act="delacct">অ্যাকাউন্ট মুছুন</button></div>`;
+async function admin(){if(!isAdm())return`<h2>অ্যাডমিন</h2><p class="mu">শুধু অ্যাডমিনের জন্য।</p>`;
+const P=await DB.all('reps'),D=await DB.all('donors'),nm=id=>(D.find(x=>x.id===id)||{n:'(মুছে গেছে)'}).n,S=D.filter(x=>x.sus);
+return`<h2>অ্যাডমিন মডারেশন</h2><div class="box"><h3>রিপোর্ট (${bn(P.length)})</h3>${P.length?P.map(r=>`<div class="kv" style="flex-wrap:wrap"><span><b>${E(nm(r.to))}</b><br><small class="mu">${E(r.why)}${r.txt?': '+E(r.txt):''}</small></span><span><button class="sm" data-act="sus" data-id="${r.to}" data-rid="${r.id}">স্থগিত</button> <button class="sm" data-act="dis" data-rid="${r.id}">বাতিল</button></span></div>`).join(''):'<p class="mu">কোনো রিপোর্ট নেই।</p>'}</div>
+<div class="box"><h3>স্থগিত প্রোফাইল (${bn(S.length)})</h3>${S.length?S.map(x=>`<div class="kv"><span>${E(x.n)}</span><button class="sm" data-act="unsus" data-id="${x.id}">চালু করুন</button></div>`).join(''):'<p class="mu">কোনোটি নেই।</p>'}</div><button class="btn o" data-act="out">অ্যাডমিন থেকে বের হন</button>`}
+
+const SITE='https://tubassir.github.io/roktobondhu/',QRURI='data:image/png;base64,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';
+const loadImg=u=>new Promise(r=>{const i=new Image();i.crossOrigin='anonymous';i.referrerPolicy='no-referrer';i.onload=()=>r(i);i.onerror=()=>r(null);i.src=u});
+async function drawCard(x){
+const FN='"Hind Siliguri","Noto Sans Bengali",sans-serif',F=(w,z)=>w+' '+z+'px '+FN;
+try{await document.fonts.load(F(700,48));await document.fonts.load(F(400,32))}catch(e){}
+const c=document.createElement('canvas');c.width=1080;c.height=1350;const g=c.getContext('2d');
+const fit=(t,w,z,wt)=>{g.font=F(wt,z);while(g.measureText(t).width>w&&z>24){z-=2;g.font=F(wt,z)}};
+const rr=(a,b,w,h,r)=>{g.beginPath();g.moveTo(a+r,b);g.arcTo(a+w,b,a+w,b+h,r);g.arcTo(a+w,b+h,a,b+h,r);g.arcTo(a,b+h,a,b,r);g.arcTo(a,b,a+w,b,r);g.closePath()};
+g.fillStyle='#fff';g.fillRect(0,0,1080,1350);
+g.fillStyle='#c8102e';g.fillRect(0,0,1080,170);
+g.save();g.translate(46,18);g.scale(0.52,0.52);g.fillStyle='#fff';g.fill(new Path2D('M128 14C128 14 52 98 52 156a76 76 0 0 0 152 0C204 98 128 14 128 14Z'));g.fillStyle='#c8102e';g.fill(new Path2D('M128 192C92 168 78 150 78 130C78 114 90 104 104 104C114 104 123 109 128 118C133 109 142 104 152 104C166 104 178 114 178 130C178 150 164 168 128 192Z'));g.restore();
+g.fillStyle='#fff';g.textAlign='left';g.textBaseline='alphabetic';g.font=F(700,58);g.fillText('রক্তবন্ধু বাংলাদেশ',196,108);
+g.save();g.beginPath();g.arc(540,370,125,0,7);g.closePath();g.clip();
+const im=x.ph?await loadImg(x.ph):null;
+if(im){const k=Math.max(250/im.width,250/im.height);g.drawImage(im,540-im.width*k/2,370-im.height*k/2,im.width*k,im.height*k)}
+else{g.fillStyle='#e8f3ec';g.fillRect(415,245,250,250);g.fillStyle='#00704a';g.font=F(700,120);g.textAlign='center';g.textBaseline='middle';g.fillText([...(x.n||'র')][0],540,375)}
+g.restore();g.lineWidth=10;g.strokeStyle='#00704a';g.beginPath();g.arc(540,370,125,0,7);g.stroke();
+g.textAlign='center';g.textBaseline='alphabetic';
+g.fillStyle='#17251e';fit(x.n,900,66,700);g.fillText(x.n,540,575);
+g.fillStyle='#c8102e';rr(340,605,400,78,39);g.fill();g.fillStyle='#fff';g.font=F(700,40);g.fillText('রক্তের গ্রুপ: '+x.g,540,660);
+g.fillStyle='#5d6f66';const ar=(x.u?x.u+', ':'')+x.d;fit(ar,900,38,400);g.fillText(ar,540,745);
+const box=[[60,bn(x.dn||0),'মোট রক্তদান'],[390,bn(x.dp||0),'দানস্থল'],[720,x.d,'জেলা']];
+for(const [a,v,l] of box){g.fillStyle='#e8f3ec';rr(a,790,300,190,24);g.fill();g.fillStyle='#c8102e';fit(v,260,76,700);g.fillText(v,a+150,885);g.fillStyle='#00704a';g.font=F(400,32);g.fillText(l,a+150,945)}
+g.fillStyle='#c8102e';g.font=F(700,56);g.fillText('“রক্ত দিন, জীবন বাঁচান”',540,1075);
+g.fillStyle='#00704a';g.fillRect(0,1130,1080,220);
+const q=await loadImg(QRURI);g.fillStyle='#fff';rr(54,1150,180,180,14);g.fill();if(q){g.imageSmoothingEnabled=false;g.drawImage(q,62,1158,164,164)}
+g.textAlign='left';g.fillStyle='#fff';g.font=F(700,46);g.fillText('আপনিও রক্তদাতা হোন',270,1218);
+g.font='700 36px Arial,sans-serif';g.fillText('tubassir.github.io/roktobondhu',270,1275);
+g.font=F(400,30);g.fillText('রক্তদাতা খুঁজুন · জরুরি অনুরোধ',270,1318);
+return c}
+async function shareCard(x){const c=await drawCard(x);const b=await new Promise(r=>c.toBlob(r,'image/png'));const f=new File([b],'roktobondhu-card.png',{type:'image/png'});const text='আমি রক্তবন্ধু বাংলাদেশে রক্তদাতা। আপনিও যুক্ত হোন: '+SITE;
+if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],text,title:'রক্তবন্ধু বাংলাদেশ'})}catch(e){if(e.name!=='AbortError')throw e}return}
+const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='roktobondhu-card.png';document.body.appendChild(a);a.click();a.remove();toast('ছবি সেভ হয়েছে, এবার ফেসবুকে পোস্ট করুন')}
+async function sync(u){const L=await DB.q('donations','uid',u),m=await DB.get('donors',u);if(!m)return;m.dn=L.length;m.dp=new Set(L.map(r=>r.h.toLowerCase())).size;const last=L.map(r=>r.dt).sort().pop(),pv=(await DB.get('donorsPrivate',u))||{id:u,sp:false,shared:[]},cur=pv.ld||m.ld||'';pv.ld=(last&&last>cur)?last:cur;if(pv.ld)m.nx=nxOf(pv.ld);delete m.ld;await DB.put('donorsPrivate',pv);await DB.put('donors',m)}
+async function migrate(u){const m=await DB.get('donors',u);if(m&&'ld' in m){const pv=(await DB.get('donorsPrivate',u))||{id:u,sp:false,shared:[]};if(m.ld)pv.ld=m.ld;m.nx=nxOf(m.ld);delete m.ld;await DB.put('donorsPrivate',pv);await DB.put('donors',m)}}
+const donBox=(x,L)=>`<div class="box"><h3>আমার রক্তদান</h3><div class="kv"><span>মোট দান</span><b>${bn(x.dn||0)} বার</b></div><div class="kv"><span>দানস্থল</span><b>${bn(x.dp||0)}টি</b></div>${L.map(r=>`<div class="kv"><span><b>${E(r.h)}</b><br><small class="mu">${E(r.d)}, ${new Date(r.dt).toLocaleDateString('bn-BD')}</small></span><button class="sm" data-act="deldon" data-id="${r.id}">মুছুন</button></div>`).join('')}
+<details><summary>+ রক্তদান যোগ করুন</summary><form id="f-don"><label for="dh">হাসপাতাল বা স্থানের নাম</label><input id="dh" required><label for="dd">জেলা</label><select id="dd" required>${o(ALLD,'','বেছে নিন')}</select><label for="dt">তারিখ</label><input id="dt" type="date" max="${today}" required><button class="btn" type="submit">যোগ করুন</button></form></details><p class="note">এটা আপনার নিজের লেখা তথ্য। অন্যরা শুধু মোট সংখ্যা ও দানস্থলের সংখ্যা দেখতে পায়, হাসপাতালের নাম বা তারিখ নয়।</p></div>`;
+const CEN={"ঢাকা":[23.81,90.41],"গাজীপুর":[23.99,90.42],"নারায়ণগঞ্জ":[23.62,90.5],"নরসিংদী":[23.92,90.72],"মানিকগঞ্জ":[23.86,90.0],"মুন্সিগঞ্জ":[23.55,90.53],"কিশোরগঞ্জ":[24.43,90.78],"টাঙ্গাইল":[24.25,89.92],"ফরিদপুর":[23.61,89.84],"মাদারীপুর":[23.17,90.2],"শরীয়তপুর":[23.21,90.35],"রাজবাড়ী":[23.76,89.64],"গোপালগঞ্জ":[23.01,89.83],"চট্টগ্রাম":[22.36,91.78],"কক্সবাজার":[21.45,91.98],"কুমিল্লা":[23.46,91.18],"ব্রাহ্মণবাড়িয়া":[23.97,91.11],"চাঁদপুর":[23.23,90.65],"নোয়াখালী":[22.87,91.1],"ফেনী":[23.02,91.4],"লক্ষ্মীপুর":[22.94,90.84],"খাগড়াছড়ি":[23.12,91.98],"রাঙামাটি":[22.63,92.2],"বান্দরবান":[22.19,92.22],"রাজশাহী":[24.37,88.6],"নাটোর":[24.41,88.99],"নওগাঁ":[24.8,88.93],"চাঁপাইনবাবগঞ্জ":[24.6,88.28],"পাবনা":[24.0,89.23],"বগুড়া":[24.85,89.37],"সিরাজগঞ্জ":[24.45,89.7],"জয়পুরহাট":[25.1,89.02],"খুলনা":[22.82,89.55],"যশোর":[23.17,89.21],"সাতক্ষীরা":[22.72,89.07],"বাগেরহাট":[22.65,89.79],"নড়াইল":[23.17,89.5],"মাগুরা":[23.49,89.42],"ঝিনাইদহ":[23.54,89.17],"কুষ্টিয়া":[23.9,89.12],"চুয়াডাঙ্গা":[23.64,88.85],"মেহেরপুর":[23.76,88.63],"বরিশাল":[22.7,90.37],"পটুয়াখালী":[22.36,90.33],"ভোলা":[22.69,90.65],"পিরোজপুর":[22.58,89.97],"ঝালকাঠি":[22.64,90.2],"বরগুনা":[22.15,90.13],"সিলেট":[24.89,91.87],"মৌলভীবাজার":[24.48,91.77],"হবিগঞ্জ":[24.38,91.42],"সুনামগঞ্জ":[25.07,91.4],"রংপুর":[25.74,89.25],"দিনাজপুর":[25.63,88.64],"কুড়িগ্রাম":[25.81,89.64],"গাইবান্ধা":[25.33,89.53],"লালমনিরহাট":[25.99,89.45],"নীলফামারী":[25.93,88.86],"পঞ্চগড়":[26.34,88.55],"ঠাকুরগাঁও":[26.03,88.46],"ময়মনসিংহ":[24.75,90.41],"জামালপুর":[24.92,89.94],"নেত্রকোণা":[24.88,90.73],"শেরপুর":[25.02,90.02]};
+const CEND={"ঢাকা":[23.81,90.41],"চট্টগ্রাম":[22.36,91.78],"রাজশাহী":[24.37,88.60],"খুলনা":[22.82,89.55],"বরিশাল":[22.70,90.37],"সিলেট":[24.89,91.87],"রংপুর":[25.74,89.25],"ময়মনসিংহ":[24.75,90.41]};
+let MAP=null,LAY=null,PLACES=[],PF='hospital';
+const kindOf=t=>(t.amenity==='blood_bank'||t.healthcare==='blood_bank'||t.healthcare==='blood_donation')?'blood':'hospital';
+const tel=p=>String(p).replace(/[^+\d]/g,'');
+const mapPage=async()=>{PF='hospital';const D=sess()?await DB.pub():[],cnt={};D.forEach(x=>cnt[x.dv]=(cnt[x.dv]||0)+1);
+return`<h2>বাংলাদেশের মানচিত্র</h2><p class="mu">বিভাগ বা জেলা বেছে হাসপাতাল ও ব্লাড ব্যাংক খুঁজুন</p>
+<div class="dg">${DS.map(k=>`<button class="dc" data-act="mdiv" data-id="${k}"><b>${k}</b><small>${sess()?bn(cnt[k]||0)+' জন দাতা':'প্রবেশ করলে সংখ্যা দেখা যাবে'}</small></button>`).join('')}</div>
+<form id="f-m">${loc('m',{},1)}</form>
+<div class="row"><button class="btn" data-act="geo">এলাকা খুঁজুন</button><button class="btn g" data-act="findhere">এই এলাকায় দেখান</button></div>
+<div id="mp"></div>
+<div class="tabs2"><button class="on" data-act="ptab" data-id="hospital">হাসপাতাল</button><button data-act="ptab" data-id="blood">ব্লাড ব্যাংক</button></div>
+<div id="pl"><p class="em">জেলা বেছে নিন, অথবা মানচিত্র জুম করে “এই এলাকায় দেখান” চাপুন।</p></div>
+<p class="note">তথ্য OpenStreetMap থেকে আসে। ফোন নম্বর বা ঠিকানা পুরনো হতে পারে, যাওয়ার আগে ফোন করে নিশ্চিত হোন। ব্লাড ব্যাংকের তথ্য কম থাকতে পারে।</p>`};
+function initMap(){const el=$('#mp');if(!el)return;
+if(!window.L){el.innerHTML='<p class="em">মানচিত্র লোড হয়নি। ইন্টারনেট দেখে পাতা রিফ্রেশ করুন।</p>';return}
+if(MAP){try{MAP.remove()}catch(e){}MAP=null}
+MAP=L.map(el).setView([23.8,90.35],7);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap'}).addTo(MAP);
+LAY=L.layerGroup().addTo(MAP);drawPlaces();renderList()}
+function drawPlaces(){if(!MAP||!LAY)return;LAY.clearLayers();
+PLACES.filter(p=>p.k===PF).forEach(p=>{const ic=L.divIcon({className:'',html:`<div class="pin ${p.k}">${p.k==='blood'?'💧':'+'}</div>`,iconSize:[30,30],iconAnchor:[15,15]});
+L.marker([p.la,p.lo],{icon:ic}).addTo(LAY).bindPopup(`<b>${E(p.n)}</b>${p.ad?'<br>'+E(p.ad):''}${p.ph?'<br><a href="tel:'+E(tel(p.ph))+'">'+E(p.ph)+'</a>':''}`)})}
+function renderList(){const el=$('#pl');if(!el||!PLACES.length)return;const L2=PLACES.filter(p=>p.k===PF);
+el.innerHTML=L2.length?L2.slice(0,60).map(p=>`<div class="c"><span class="b2 ${p.k}">${p.k==='blood'?'💧':'+'}</span><div class="i"><b>${E(p.n)}</b>${p.ad?`<small>${E(p.ad)}</small>`:''}<small>${p.ph?E(p.ph):'ফোন নম্বর নেই'}</small></div><div class="act">${p.ph?`<a class="call" href="tel:${E(tel(p.ph))}">কল</a>`:''}<a class="call n" href="https://www.google.com/maps/dir/?api=1&destination=${p.la},${p.lo}" target="_blank" rel="noopener">পথ</a></div></div>`).join(''):`<p class="em">এই এলাকায় ${PF==='blood'?'ব্লাড ব্যাংক':'হাসপাতাল'} পাওয়া যায়নি। মানচিত্র সরিয়ে বা জুম আউট করে আবার চেষ্টা করুন।</p>`}
+async function findHere(){if(!MAP)return toast('মানচিত্র লোড হয়নি');
+if(MAP.getZoom()<10)return toast('আরও জুম করুন বা জেলা বেছে নিন');
+const b=MAP.getBounds(),bb=[b.getSouth(),b.getWest(),b.getNorth(),b.getEast()].map(v=>v.toFixed(5)).join(',');
+const q=`[out:json][timeout:25];(nwr["amenity"="hospital"](${bb});nwr["amenity"="blood_bank"](${bb});nwr["healthcare"="blood_bank"](${bb});nwr["healthcare"="blood_donation"](${bb}););out center 150;`;
+$('#pl').innerHTML='<p class="em">খোঁজা হচ্ছে…</p>';
+let j=null;for(const u of ['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter']){try{const r=await fetch(u+'?data='+encodeURIComponent(q));if(r.ok){j=await r.json();break}}catch(e){}}
+if(!j){$('#pl').innerHTML='<p class="em">তথ্য আনা যায়নি। একটু পরে আবার চেষ্টা করুন।</p>';return}
+PLACES=j.elements.map(e=>{const t=e.tags||{};return{id:e.type+e.id,k:kindOf(t),n:t['name:bn']||t.name||'নামহীন',ph:(t.phone||t['contact:phone']||'').split(';')[0].trim(),ad:t['addr:full']||[t['addr:street'],t['addr:city']].filter(Boolean).join(', '),la:e.lat!=null?e.lat:(e.center&&e.center.lat),lo:e.lon!=null?e.lon:(e.center&&e.center.lon)}}).filter(p=>p.la!=null);
+drawPlaces();renderList()}
+async function geo(){if(!MAP)return toast('মানচিত্র লোড হয়নি');const u=V('mu'),d=V('md'),dv=V('mdv');
+if(!u&&!d&&!dv)return toast('বিভাগ, জেলা বা উপজেলা দিন');
+const q=[u,d,(dv&&!d)?dv+' বিভাগ':''].filter(Boolean).join(', ')+', বাংলাদেশ';
+try{const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&accept-language=bn&countrycodes=bd&q='+encodeURIComponent(q));const j=await r.json();
+if(!j.length)return toast('এলাকা খুঁজে পাওয়া যায়নি');const b=j[0].boundingbox;MAP.fitBounds([[+b[0],+b[2]],[+b[1],+b[3]]]);await findHere()}catch(e){toast('এলাকা খোঁজা যায়নি, একটু পরে চেষ্টা করুন')}}
+let NEXT=null;const afterLogin=g=>{const n=NEXT;NEXT=null;return reset(n||(g?'me':'register'))};
+let AMODE='in';const FAKE='@phone.roktobondhu.invalid';const mailOf=v=>{v=v.trim();return v.includes('@')?v.toLowerCase():ph(v)+FAKE};const isFake=e=>!!e&&e.endsWith(FAKE);
+const errMsg=x=>({'auth/account-exists-with-different-credential':'এই ইমেইল দিয়ে আগে অন্য পদ্ধতিতে (যেমন গুগল) ঢোকা হয়েছে, ওই পদ্ধতিতেই প্রবেশ করুন','auth/requires-recent-login':'নিরাপত্তার জন্য লগআউট করে আবার প্রবেশ করে চেষ্টা করুন','auth/popup-blocked':'পপআপ আটকে গেছে, ব্রাউজারে পপআপের অনুমতি দিন','auth/email-already-in-use':'এটা দিয়ে আগেই অ্যাকাউন্ট আছে। "প্রবেশ" ট্যাবে যান বা অন্য ইমেইল দিন','auth/invalid-credential':'নম্বর বা পাসওয়ার্ড ঠিক নয়','auth/wrong-password':'নম্বর বা পাসওয়ার্ড ঠিক নয়','auth/user-not-found':'এই নম্বরে নিবন্ধন নেই','auth/weak-password':'পাসওয়ার্ড আরও শক্ত দিন (কমপক্ষে ৮ অক্ষর)','auth/too-many-requests':'অনেকবার চেষ্টা হয়েছে, কিছুক্ষণ পর আবার চেষ্টা করুন','auth/invalid-email':'নম্বর বা ইমেইল ঠিক নয়','auth/popup-closed-by-user':'','auth/cancelled-popup-request':'','auth/operation-not-allowed':'এই পদ্ধতি এখনো চালু হয়নি','auth/billing-not-enabled':'ফোন কোড পাঠানো যাচ্ছে না, গুগল দিয়ে প্রবেশ করুন'}[x.code]??('ব্যর্থ হয়েছে: '+(x.code||x.message)));
+async function render(){if(CFG.apiKey.startsWith('PASTE')){$('#app').innerHTML='<p class="em">Firebase কনফিগ এখনো বসানো হয়নি। index.html এর ওপরের CFG অংশে আপনার মান বসান।</p>';return}const f={home,map:mapPage,search,register,login,request,me,pe,pa,ps,pn,pd,hp:hlp,px,admin,donor:()=>pDonor(cur.p)}[cur.r]||home;let h;
+try{h=await f()}catch(x){h='<p class="em">কিছু ভুল হয়েছে। আবার চেষ্টা করুন।</p>'}
+$('#app').innerHTML=h;$('#bk').hidden=!stack.length;$('#hl').textContent=sess()?'প্রোফাইল':'প্রবেশ';$('#hl').dataset.go=sess()?'me':'login';
+document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.go===(/^(pe|pa|ps|pn|pd|hp|px)$/.test(cur.r)?'me':cur.r)));
+if(cur.r==='search'&&$('#sg'))res();if(cur.r==='map')initMap();window.scrollTo(0,0)}
+let tm;function toast(m){const t=$('#t');t.textContent=m;t.classList.add('show');clearTimeout(tm);tm=setTimeout(()=>t.classList.remove('show'),3200)}
+const reset=r=>{stack=[];cur={r};render()};
+document.addEventListener('click',async ev=>{const a=ev.target.closest('[data-go],[data-act]');if(!a)return;ev.preventDefault();const d=a.dataset,id=d.id;try{
+if(d.go){if(d.root!==undefined)stack=[];return go(d.go,d.p)}
+const u=sess();
+if(d.act==='bk'){cur=stack.pop()||{r:'home'};return render()}
+if(d.act==='amode'){AMODE=d.v;return render()}
+if(d.act==='showpw'){const pi=$('#pw');pi.type=pi.type==='password'?'text':'password';a.textContent=pi.type==='password'?'দেখান':'লুকান';return}
+if(d.act==='google'){await signInWithPopup(auth,new GoogleAuthProvider());const g=await DB.get('donors',sess());return afterLogin(g)}
+if(d.act==='mdiv'){const sl=$('#mdv');sl.value=id;sl.dispatchEvent(new Event('change',{bubbles:true}));return}
+if(d.act==='findhere'){await findHere();return}
+if(d.act==='geo'){await geo();return}
+if(d.act==='ptab'){PF=id;document.querySelectorAll('.tabs2 button').forEach(b=>b.classList.toggle('on',b.dataset.id===PF));drawPlaces();renderList();return}
+if(d.act==='card'){const cx=await DB.get('donors',sess());if(cx)await shareCard(cx);return}
+if(d.act==='deldon'){await DB.del('donations',id);await sync(sess());toast('মুছে ফেলা হয়েছে')}
+if(d.act==='out'){await signOut(auth);return reset('home')}
+if(d.act==='creq'){const m=await DB.get('donors',u);await DB.put('creq',{id:u+'_'+id,to:id,from:u,fromName:m.n,ok:null});toast('অনুরোধ পাঠানো হয়েছে')}
+if(d.act==='share'||d.act==='deny'){const r=await DB.get('creq',id);r.ok=d.act==='share';await DB.put('creq',r);if(r.ok){const m=(await DB.get('donorsPrivate',u))||{id:u,p:auth.currentUser.phoneNumber||'',sp:false,shared:[]};m.shared=[...(m.shared||[]),r.from];await DB.put('donorsPrivate',m)}toast(r.ok?'নম্বর শেয়ার করা হয়েছে':'অনুরোধ বাতিল')}
+if(d.act==='close'){const r=await DB.get('requests',id);r.open=false;await DB.put('requests',r);toast('অনুরোধ বন্ধ হয়েছে')}
+if(d.act==='sus'||d.act==='unsus'){const x=await DB.get('donors',id);if(x){x.sus=d.act==='sus';await DB.put('donors',x)}if(d.rid)await DB.del('reps',d.rid)}
+if(d.act==='dis')await DB.del('reps',d.rid);
+if(d.act==='delacct'){if(!d.sure){a.dataset.sure=1;a.textContent='নিশ্চিত? আবার চাপুন';return}
+const cu=auth.currentUser,pid=((cu.providerData||[])[0]||{}).providerId;
+if(pid==='google.com')await reauthenticateWithPopup(cu,new GoogleAuthProvider());
+if(pid==='password'){const pw=($('#dpw')||{}).value||'';if(!pw)return toast('পাসওয়ার্ড দিয়ে নিশ্চিত করুন');await reauthenticateWithCredential(cu,EmailAuthProvider.credential(cu.email,pw))}
+for(const r of await DB.q('donations','uid',u))await DB.del('donations',r.id);await DB.del('donors',u);await DB.del('donorsPrivate',u);
+try{await deleteUser(cu)}catch(e){await signOut(auth)}
+toast('অ্যাকাউন্ট মুছে গেছে');return reset('home')}
+render()}catch(x){const t=errMsg(x);if(t)toast(t)}});
+document.addEventListener('change',async ev=>{const t=ev.target;
+if(t.dataset.dv!==undefined){const s=$('#'+t.dataset.dv+'d'),any=s.options[0].textContent.startsWith('সব');s.innerHTML=o(t.value?DIV[t.value]:(any?ALLD:[]),'',any?'সব জেলা':'বেছে নিন')}
+if(t.dataset.pv){const c=t.dataset.pv==='sp'?'donorsPrivate':'donors',x=await DB.get(c,sess());x[t.dataset.pv]=t.checked;await DB.put(c,x);toast('সেটিং সংরক্ষিত হয়েছে')}
+if(MAP&&t.id==='mdv'&&t.value&&CEND[t.value])MAP.setView(CEND[t.value],9,{animate:false});
+if(MAP&&t.id==='md'&&t.value&&CEN[t.value]){MAP.setView(CEN[t.value],10,{animate:false});findHere()}
+if(t.closest('#f-s'))res()});
+document.addEventListener('input',ev=>{if(ev.target.id==='su')res()});
+document.addEventListener('submit',async ev=>{ev.preventDefault();const f=ev.target.id;try{
+const fields=()=>({n:V('fn'),g:V('fg'),dv:dvOf(V('fd')),d:V('fd'),u:V('fu'),nx:nxOf($('#fl')?$('#fl').value:''),av:$('#fa').checked,ph:$('#fph')&&$('#fph').checked?(auth.currentUser.photoURL||''):''});
+if(f==='f-reg'||f==='f-edit'){const x=fields(),u=sess(),p=ph(V('fp'));if(!u)return toast('আগে প্রবেশ করুন');if(!okp(p))return toast('সঠিক মোবাইল নম্বর দিন, যেমন 01712345678');
+const pv0=(await DB.get('donorsPrivate',u))||{id:u,sp:false,shared:[]};pv0.p=p;if($('#fl'))pv0.ld=$('#fl').value;
+if(f==='f-reg'){pv0.sp=!!($('#fsp')&&$('#fsp').checked);await DB.put('donors',{id:u,hid:false,sus:false,dn:0,dp:0,...x});await DB.put('donorsPrivate',pv0);toast('নিবন্ধন সম্পন্ন হয়েছে');return reset('me')}
+const m=await DB.get('donors',u);delete m.ld;await DB.put('donors',Object.assign(m,x));await DB.put('donorsPrivate',pv0);toast('প্রোফাইল সংরক্ষিত হয়েছে');return render()}
+if(f==='f-pw'){const raw=V('pn'),pw=$('#pw').value,em=mailOf(raw);if(!raw.includes('@')&&!okp(ph(raw)))return toast('সঠিক মোবাইল নম্বর বা ইমেইল দিন');
+if(AMODE==='up'){if(raw.includes('@'))return toast('নতুন নিবন্ধনে মোবাইল নম্বর দিন');if(pw.length<8)return toast('পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের দিন');await createUserWithEmailAndPassword(auth,em,pw);return afterLogin(null)}
+await signInWithEmailAndPassword(auth,em,pw);const g0=await DB.get('donors',sess());return afterLogin(g0)}
+if(f==='f-forgot'){const e=V('fe').toLowerCase();if(!e.includes('@')||isFake(e))return toast('আপনার আসল ইমেইল দিন');try{await sendPasswordResetEmail(auth,e)}catch(x){}return toast('ইমেইলটি এই অ্যাকাউন্টে যুক্ত থাকলে রিসেট লিংক গেছে, স্প্যাম ফোল্ডারও দেখুন')}
+if(f==='f-addmail'){const e=V('am').toLowerCase();await verifyBeforeUpdateEmail(auth.currentUser,e);return toast('ইমেইলে একটা লিংক গেছে। লিংকে চাপলে ইমেইল যুক্ত হবে, স্প্যাম ফোল্ডারও দেখুন।')}
+if(f==='f-login'){const p=ph(V('lp'));if(!okp(p))return toast('সঠিক মোবাইল নম্বর দিন');try{if(window.rv)window.rv.clear()}catch(x){}window.rv=new RecaptchaVerifier(auth,'lb',{size:'invisible'});window.cf=await signInWithPhoneNumber(auth,'+88'+p,window.rv);$('#f-login').hidden=true;$('#f-otp').hidden=false;return toast('কোড পাঠানো হয়েছে')}
+if(f==='f-otp'){await window.cf.confirm(V('lo'));const x=await DB.get('donors',sess());return reset(x?'me':'register')}
+if(f==='f-req'){if(!sess())return toast('অনুরোধ পোস্ট করতে আগে প্রবেশ করুন');const p=ph(V('qp'));if(!okp(p))return toast('সঠিক মোবাইল নম্বর দিন');
+const q={id:uid(),g:V('qg'),b:V('qb'),dv:V('qdv'),d:V('qd'),u:V('qu'),h:V('qh'),urg:V('qurg'),n:V('qn'),p,by:sess()||'anon',ts:Date.now(),open:true};await DB.put('requests',q);
+const k=(await DB.pub()).filter(x=>x.g===q.g&&x.d===q.d&&!x.hid&&!x.sus&&st(x)[0]==='s-ok').length;toast('অনুরোধ পোস্ট হয়েছে। এই জেলায় '+bn(k)+' জন প্রস্তুত দাতা আছেন।');return render()}
+if(f==='f-don'){const u=sess(),h=V('dh'),dd=V('dd'),dt=$('#dt').value;if(!u||!h||!dd||!dt)return toast('সব ঘর পূরণ করুন');await DB.put('donations',{id:uid(),uid:u,h,d:dd,dt});await sync(u);toast('রক্তদান যোগ হয়েছে');return render()}
+if(f==='f-rep'){if(!sess())return toast('রিপোর্ট করতে আগে প্রবেশ করুন');await DB.put('reps',{id:uid(),to:ev.target.dataset.id,why:V('rr'),txt:V('rt'),by:sess()||'anon'});toast('রিপোর্ট পাঠানো হয়েছে, ধন্যবাদ');return render()}}catch(x){const t=errMsg(x);if(t)toast(t)}});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+onAuthStateChanged(auth,async u=>{ADM=false;if(u){ADM=!!(await DB.get('admins',u.uid));migrate(u.uid).catch(()=>{})}render()});
+</script>
+</body>
+</html>
