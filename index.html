@@ -88,6 +88,14 @@ ul{margin:6px 0;padding-left:20px}
 <button id="hl" class="sm" data-go="login">প্রবেশ</button></header>
 <main id="app"></main>
 </div>
+<style>
+#ibar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(88px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:8px;z-index:8;max-width:94%;animation:ibar .4s ease}
+#ibar[hidden]{display:none}
+#ibar .ib{display:flex;align-items:center;gap:8px;min-height:48px;padding:0 20px;border:0;border-radius:26px;background:var(--rd);color:var(--on);font-family:inherit;font-weight:700;font-size:16px;box-shadow:0 6px 18px rgba(200,16,46,.35);cursor:pointer;white-space:nowrap}
+#ibar .ic{display:flex;align-items:center;justify-content:center;flex:0 0 auto;width:34px;height:34px;border-radius:50%;border:1px solid var(--ln);background:var(--cd);color:var(--mu);font-family:inherit;font-weight:600;font-size:15px;cursor:pointer}
+@keyframes ibar{from{opacity:0;transform:translateX(-50%) translateY(14px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+</style>
+<div id="ibar" hidden><button id="ibtn" class="ib">📲 অ্যাপ ইনস্টল করুন</button><button id="ibx" class="ic" aria-label="বন্ধ করুন">✕</button></div>
 <nav id="nav"><button data-go="home" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg><span>হোম</span></button><button data-go="map" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg><span>ম্যাপ</span></button><button data-go="search" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.2c3 .2 5 2.4 5 5.8"/></svg><span>দাতা</span></button><button data-go="request" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 01-12 0c0-4.5 6-11 6-11z"/><path d="M12 11v5M9.5 13.5h5"/></svg><span>জরুরি</span></button><button data-go="me" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg><span>প্রোফাইল</span></button></nav>
 <div id="t" role="status"></div>
 <script type="module">
@@ -154,7 +162,8 @@ return`<div class="hero2"><h2>এক ফোঁটা রক্ত<br>বাঁ�
 <div class="sec"><h3>সাম্প্রতিক আপডেট</h3><a href="#" data-go="request">সকল দেখুন →</a></div>
 ${Q.length?Q.map(x=>`<a class="c" href="#" data-go="request"><span class="b"><i>${E(x.g)}</i></span><div class="i"><b>${bn(x.b)} ব্যাগ রক্ত লাগবে</b><small>${E(x.h)}, ${E(x.d)}</small><small class="s-w">${E(x.urg)}</small></div></a>`).join(''):'<p class="em">এখন কোনো চলমান অনুরোধ নেই।</p>'}
 ${sess()?'':'<a class="btn o" href="#" data-go="register">দাতা হিসেবে নিবন্ধন করুন</a>'}
-${isAdm()?`<p class="note"><a href="#" data-go="admin" style="color:inherit">অ্যাডমিন</a></p>`:''}`};
+${isAdm()?`<p class="note"><a href="#" data-go="admin" style="color:inherit">অ্যাডমিন</a></p>`:''}
+<p class="mu" style="text-align:center;margin:16px 0 8px;font-size:13px">Made by <b style="color:var(--rdt)">Tubassir Chowdhury</b></p>`};
 const search=async()=>{if(!sess()){NEXT='search';return login()}return`<h2>রক্তদাতা খুঁজুন</h2><form id="f-s"><label for="sg">রক্তের গ্রুপ</label><select id="sg">${o(G,'','সব গ্রুপ')}</select>${loc('s',{},1)}</form><div id="rs"></div>`};
 async function res(){const g=V('sg'),dv=V('sdv'),d=V('sd'),u=V('su');
 const L=(await DB.pub()).filter(x=>!x.hid&&!x.sus&&(!g||x.g===g)&&(!dv||x.dv===dv)&&(!d||x.d===d)&&(!u||x.u.includes(u)));
@@ -204,7 +213,7 @@ async function pn(){const c=await ctx();if(!c)return register();const R=(await D
 return`<h2>নোটিফিকেশন</h2><div class="box"><h3>যোগাযোগের অনুরোধ</h3>${R.length?R.map(r=>`<div class="kv"><span>${E(r.fromName)}</span><span><button class="sm" data-act="share" data-id="${r.id}">নম্বর দিন</button> <button class="sm" data-act="deny" data-id="${r.id}">না</button></span></div>`).join(''):'<p class="mu">কোনো নতুন অনুরোধ নেই।</p>'}</div><p class="note">অ্যাপ বন্ধ থাকলে নোটিফিকেশন আসার ব্যবস্থা এখনো নেই। মাঝে মাঝে অ্যাপ খুলে এখানে দেখুন।</p>`}
 async function pd(){const c=await ctx();if(!c)return register();const DL=(await DB.q('donations','uid',c.u)).sort((a,b)=>b.dt.localeCompare(a.dt));
 return`<h2>আমার রক্তদানের তথ্য</h2><button class="btn g" data-act="card">প্রোফাইল কার্ড শেয়ার করুন</button>${donBox(c.x,DL)}`}
-const hlp=async()=>`<h2>সহায়তা ও রিপোর্ট</h2><div class="box"><h3>সন্দেহজনক প্রোফাইল</h3><p>কেউ টাকা চাইলে, বিরক্ত করলে বা ভুয়া তথ্য দিলে তার প্রোফাইল খুলে <b>এই প্রোফাইল রিপোর্ট করুন</b> চাপুন। অ্যাডমিন দেখবেন।</p></div><div class="box"><h3>নিরাপদে থাকতে</h3><ul><li>রক্তের জন্য কাউকে টাকা দেবেন না।</li><li>অচেনা কাউকে আপনার ঠিকানা বা ব্যক্তিগত তথ্য দেবেন না।</li><li>জরুরিতে আগে হাসপাতাল বা ব্লাড ব্যাংকে যোগাযোগ করুন।</li></ul></div><a class="btn o" href="#" data-go="search">দাতার তালিকা</a><a class="btn o" href="privacy.html" target="_blank" rel="noopener">গোপনীয়তা নীতি</a>`;
+const hlp=async()=>`<h2>সহায়তা ও রিপোর্ট</h2><div class="box"><h3>অ্যাপ সম্পর্কে</h3><p>রক্তবন্ধু বাংলাদেশ — সম্পূর্ণ বিনামূল্যের সামাজিক সেবা।<br>Made by <b>Tubassir Chowdhury</b></p></div><div class="box"><h3>সন্দেহজনক প্রোফাইল</h3><p>কেউ টাকা চাইলে, বিরক্ত করলে বা ভুয়া তথ্য দিলে তার প্রোফাইল খুলে <b>এই প্রোফাইল রিপোর্ট করুন</b> চাপুন। অ্যাডমিন দেখবেন।</p></div><div class="box"><h3>নিরাপদে থাকতে</h3><ul><li>রক্তের জন্য কাউকে টাকা দেবেন না।</li><li>অচেনা কাউকে আপনার ঠিকানা বা ব্যক্তিগত তথ্য দেবেন না।</li><li>জরুরিতে আগে হাসপাতাল বা ব্লাড ব্যাংকে যোগাযোগ করুন।</li></ul></div><a class="btn o" href="#" data-go="search">দাতার তালিকা</a><a class="btn o" href="privacy.html" target="_blank" rel="noopener">গোপনীয়তা নীতি</a>`;
 const px=async()=>`<h2>অ্যাকাউন্ট মুছে ফেলা</h2><div class="box"><p>অ্যাকাউন্ট মুছলে আপনার প্রোফাইল, ফোন নম্বর, রক্তদানের তালিকা আর লগইনের রেকর্ড মুছে যাবে, ফেরত আনা যাবে না। নিরাপত্তার জন্য আবার নিশ্চিত করতে হবে: গুগলে প্রবেশ করে অথবা নিচে পাসওয়ার্ড দিয়ে।</p>${auth.currentUser&&((auth.currentUser.providerData||[])[0]||{}).providerId==='password'?'<label for="dpw">আপনার পাসওয়ার্ড</label><input id="dpw" type="password" autocomplete="current-password">':''}<button class="btn" style="background:#8e0e24" data-act="delacct">অ্যাকাউন্ট মুছুন</button></div>`;
 async function admin(){if(!isAdm())return`<h2>অ্যাডমিন</h2><p class="mu">শুধু অ্যাডমিনের জন্য।</p>`;
 const P=await DB.all('reps'),D=await DB.all('donors'),nm=id=>(D.find(x=>x.id===id)||{n:'(মুছে গেছে)'}).n,S=D.filter(x=>x.sus);
@@ -350,7 +359,23 @@ const k=(await DB.pub()).filter(x=>x.g===q.g&&x.d===q.d&&!x.hid&&!x.sus&&st(x)[0
 if(f==='f-don'){const u=sess(),h=V('dh'),dd=V('dd'),dt=$('#dt').value;if(!u||!h||!dd||!dt)return toast('সব ঘর পূরণ করুন');await DB.put('donations',{id:uid(),uid:u,h,d:dd,dt});await sync(u);toast('রক্তদান যোগ হয়েছে');return render()}
 if(f==='f-rep'){if(!sess())return toast('রিপোর্ট করতে আগে প্রবেশ করুন');await DB.put('reps',{id:uid(),to:ev.target.dataset.id,why:V('rr'),txt:V('rt'),by:sess()||'anon'});toast('রিপোর্ট পাঠানো হয়েছে, ধন্যবাদ');return render()}}catch(x){const t=errMsg(x);if(t)toast(t)}});
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+(function(){var ib=$('#ibar');if(!ib)return;
+var standalone=matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+if(standalone)return;
+var dp=null,dism=false;try{dism=localStorage.getItem('rbi')==='1'}catch(e){}
+var ios=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+function show(){ib.hidden=false}
+function hide(save){ib.hidden=true;if(save){try{localStorage.setItem('rbi','1')}catch(e){}}}
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;if(!dism)show()});
+window.addEventListener('appinstalled',function(){hide();toast('অ্যাপ ইনস্টল হয়েছে ✓')});
+$('#ibx').addEventListener('click',function(){hide(true)});
+$('#ibtn').addEventListener('click',function(){
+if(dp){var p=dp;dp=null;p.prompt();p.userChoice.then(function(r){if(r&&r.outcome==='accepted')hide()}).catch(function(){});return}
+if(ios){toast('শেয়ার ⬆ বাটন → "হোম স্ক্রিনে যোগ করুন"');return}
+toast('ব্রাউজারের ⋮ মেনু → "ইনস্টল অ্যাপ" চাপুন')});
+if(ios&&!dism)setTimeout(function(){show()},2500);
+})();
 onAuthStateChanged(auth,async u=>{ADM=false;if(u){ADM=!!(await DB.get('admins',u.uid));migrate(u.uid).catch(()=>{})}render()});
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5ae9f00dbf28dfd',t:'MTc5NDc0OTUzNw=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5ae9f00dbf28dfd',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5afa401def1b60e',t:'MTc5NDc2MDIyOA=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5afa401def1b60e',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
