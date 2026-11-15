@@ -79,6 +79,28 @@ ul{margin:6px 0;padding-left:20px}
 .mi .ic{flex:none;width:48px;height:48px;border-radius:12px;background:var(--sf);display:grid;place-items:center}
 .mi .ic svg{width:26px;height:26px;stroke:var(--rdt);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .mi .tx{flex:1;display:flex;flex-direction:column;line-height:1.35}.mi small{color:var(--mu);font-size:14px}.mi .ch{color:var(--mu);font-size:28px}
+.ecards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.ecard{display:flex;flex-direction:column;gap:3px;border-radius:18px;padding:16px;min-height:108px;text-decoration:none;color:#fff;box-shadow:0 4px 14px rgba(15,26,21,.12)}
+.ecard.r{background:linear-gradient(135deg,#c8102e,#8e0e24)}
+.ecard.g{background:linear-gradient(135deg,#00704a,#00563a)}
+.ecard .ei{font-size:26px;line-height:1;margin-bottom:4px}
+.ecard b{font-size:18px}.ecard small{font-size:13px;opacity:.93}
+.qs{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;background:var(--cd);border:1px solid var(--ln);border-radius:16px;padding:12px;margin-top:14px}
+.qs>div{flex:1 1 130px}
+.qs label{margin:0 0 4px;font-size:13px}
+.qs .btn{margin:0;flex:0 0 auto;min-width:96px}
+.tile{position:relative}
+.nw{position:absolute;top:10px;right:10px;background:var(--rd);color:var(--on);font-size:11.5px;font-weight:700;border-radius:8px;padding:2px 8px}
+.tp{display:inline-block;font-size:12px;font-weight:700;color:var(--okt);background:var(--sf);border-radius:6px;padding:2px 8px;margin-right:6px}
+.ct{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+.ct th,.ct td{border:1px solid var(--ln);padding:7px 10px;text-align:left;vertical-align:top}
+.ct th{background:var(--sf)}
+.post p{margin:10px 0;line-height:1.75}
+.post ul{line-height:1.7}
+.post h3{margin:18px 0 6px}
+.amb9{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,#00704a,#00563a);color:#fff;border-radius:18px;padding:18px;margin-top:14px}
+.amb9 .ei{font-size:40px;flex:none}
+.amb9 .btn{margin:0;min-width:110px;background:#fff;color:#00563a}
 </style>
 </head>
 <body>
@@ -154,19 +176,26 @@ let cur={r:'home'},stack=[];
 function go(r,p){stack.push(cur);cur={r,p};render()}
 const home=async()=>{const Q=(await DB.all('requests')).filter(x=>x.open).sort((a,b)=>b.ts-a.ts).slice(0,3);
 return`<div class="hero2"><h2>এক ফোঁটা রক্ত<br>বাঁচাতে পারে<br>একটি জীবন</h2><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2C16 2 6 14 6 20a10 10 0 0020 0C26 14 16 2 16 2z" fill="#fff"/><path d="M16 14v8M12 18h8" stroke="#c8102e" stroke-width="2.4" stroke-linecap="round"/></svg></div>
+<div class="ecards"><a class="ecard r" href="#" data-go="request"><span class="ei">🩸</span><b>জরুরি রক্ত চাই</b><small>অনুরোধ দেখুন ও পাঠান</small></a><a class="ecard g" href="tel:999"><span class="ei">🚑</span><b>অ্যাম্বুলেন্স ৯৯৯</b><small>ফ্রি জরুরি কল — এক ট্যাপে</small></a></div>
+<form id="f-qs" class="qs"><div><label for="hqg">রক্তের গ্রুপ</label><select id="hqg">${o(G,'','সব')}</select></div><div><label for="hqd">জেলা</label><select id="hqd"><option value="">সব জেলা</option>${DS.map(v=>`<optgroup label="${v} বিভাগ">${DIV[v].map(x=>`<option>${x}</option>`).join('')}</optgroup>`).join('')}</select></div><button class="btn" type="submit">খুঁজুন</button></form>
 <div class="tiles">
-<a class="tile" href="#" data-go="map"><span class="ti">🗺️</span><b>বাংলাদেশের ম্যাপ</b><small>বিভাগ, জেলা ও উপজেলা অনুযায়ী খুঁজুন</small></a>
-<a class="tile" href="#" data-go="search"><span class="ti">🩸</span><b>রক্তদাতা খুঁজুন</b><small>আপনার এলাকার দাতাদের তালিকা</small></a>
+<a class="tile" href="#" data-go="map"><span class="ti">🗺️</span><b>বাংলাদেশের ম্যাপ</b><small>বিভাগ, জেলা ও উপজেলা অনুযায়ী</small></a>
+<a class="tile" href="#" data-go="search"><span class="ti">🩸</span><b>রক্তদাতা খুঁজুন</b><small>এলাকার দাতাদের তালিকা</small></a>
 <a class="tile" href="#" data-go="map"><span class="ti">🏥</span><b>হাসপাতাল ও ব্লাড ব্যাংক</b><small>ঠিকানা, যোগাযোগ ও পথ</small></a>
-<a class="tile" href="#" data-go="me"><span class="ti">👤</span><b>আমার প্রোফাইল</b><small>রক্তদানের ইতিহাস ও শেয়ার</small></a></div>
-<div class="sec"><h3>সাম্প্রতিক আপডেট</h3><a href="#" data-go="request">সকল দেখুন →</a></div>
+<a class="tile" href="#" data-go="amb"><span class="nw">নতুন</span><span class="ti">🚑</span><b>অ্যাম্বুলেন্স</b><small>৯৯৯ ও জরুরি সেবার নম্বর</small></a>
+<a class="tile" href="#" data-go="blog"><span class="nw">নতুন</span><span class="ti">📖</span><b>রক্তের গল্প</b><small>দেওয়া-নেওয়ার অভিজ্ঞতা</small></a>
+<a class="tile" href="#" data-go="safety"><span class="nw">নতুন</span><span class="ti">🛡️</span><b>সতর্কতা</b><small>নিরাপদে রক্ত দেওয়া-নেওয়া</small></a></div>
+<div class="sec"><h3>সাম্প্রতিক রক্তের অনুরোধ</h3><a href="#" data-go="request">সব দেখুন →</a></div>
 ${Q.length?Q.map(x=>`<a class="c" href="#" data-go="request"><span class="b"><i>${E(x.g)}</i></span><div class="i"><b>${bn(x.b)} ব্যাগ রক্ত লাগবে</b><small>${E(x.h)}, ${E(x.d)}</small><small class="s-w">${E(x.urg)}</small></div></a>`).join(''):'<p class="em">এখন কোনো চলমান অনুরোধ নেই।</p>'}
-${sess()?'':'<a class="btn o" href="#" data-go="register">দাতা হিসেবে নিবন্ধন করুন</a>'}
+<div class="sec"><h3>পড়ার মতো</h3><a href="#" data-go="blog">সব লেখা →</a></div>
+${BLOGS.slice(0,2).map(b=>`<a class="c" href="#" data-go="post" data-p="${b.id}"><span class="b"><i>${b.tg==='গল্প'?'🩸':'💡'}</i></span><div class="i"><b>${E(b.t)}</b><small>${b.a} · ${b.d}</small></div></a>`).join('')}
+${sess()?'':'<a class="btn o" href="#" data-go="register">দাতা হিসেবে নিবন্ধন করুন — মাত্র ১ মিনিটে</a>'}
 ${isAdm()?`<p class="note"><a href="#" data-go="admin" style="color:inherit">অ্যাডমিন</a></p>`:''}
 <p class="mu" style="text-align:center;margin:16px 0 8px;font-size:13px">Made by <b style="color:var(--rdt)">Tubassir Chowdhury</b></p>`};
-const search=async()=>{if(!sess()){NEXT='search';return login()}return`<h2>রক্তদাতা খুঁজুন</h2><form id="f-s"><label for="sg">রক্তের গ্রুপ</label><select id="sg">${o(G,'','সব গ্রুপ')}</select>${loc('s',{},1)}</form><div id="rs"></div>`};
+const search=async()=>{const q=QS||{};QS=null;return`<h2>রক্তদাতা খুঁজুন</h2>${sess()?'':'<p class="note" style="margin-top:8px">তালিকা সবার জন্য খোলা। দাতার সাথে যোগাযোগ বা নম্বর দেখতে <a href="#" data-go="login" style="color:inherit;font-weight:600">প্রবেশ করুন</a>।</p>'}<form id="f-s"><label for="sg">রক্তের গ্রুপ</label><select id="sg">${o(G,q.g||'','সব গ্রুপ')}</select>${loc('s',q,1)}</form><div id="rs"></div>`};
 async function res(){const g=V('sg'),dv=V('sdv'),d=V('sd'),u=V('su');
-const L=(await DB.pub()).filter(x=>!x.hid&&!x.sus&&(!g||x.g===g)&&(!dv||x.dv===dv)&&(!d||x.d===d)&&(!u||x.u.includes(u)));
+let L;try{L=await DB.pub()}catch(x){$('#rs').innerHTML=sess()?'<p class="em">তালিকা আনা যাচ্ছে না। একটু পরে আবার চেষ্টা করুন।</p>':'<p class="em">এখন তালিকা দেখা যাচ্ছে না।<br><a href="#" data-go="login" style="color:var(--rdt);font-weight:600">প্রবেশ করে</a> দেখুন।</p>';return}
+L=L.filter(x=>!x.hid&&!x.sus&&(!g||x.g===g)&&(!dv||x.dv===dv)&&(!d||x.d===d)&&(!u||x.u.includes(u)));
 L.sort((a,b)=>(st(a)[0]==='s-ok'?0:1)-(st(b)[0]==='s-ok'?0:1));
 $('#rs').innerHTML=`<p class="mu">${bn(L.length)} জন পাওয়া গেছে</p>`+(L.length?L.map(card).join(''):'<p class="em">কোনো দাতা পাওয়া যায়নি। গ্রুপ বা এলাকা বদলে দেখুন।</p>')}
 async function pDonor(id){const x=await DB.get('donors',id);if(!x||x.sus)return'<p class="em">প্রোফাইল পাওয়া যায়নি।</p>';
@@ -192,6 +221,30 @@ return`<h2>জরুরি রক্তের অনুরোধ</h2>
 <label for="qn">যোগাযোগকারীর নাম</label><input id="qn" required><label for="qp">যোগাযোগের নম্বর</label><input id="qp" type="tel" inputmode="numeric" placeholder="01712345678" required>
 <label class="ck"><input id="qc" type="checkbox" required> আমি সম্মতি দিচ্ছি, এই নম্বর অনুরোধের সাথে প্রকাশ্যে দেখানো হবে।</label><button class="btn" type="submit">অনুরোধ পোস্ট করুন</button></form></details>`+
 (L.length?L.map(x=>`<div class="c"><span class="b"><i>${E(x.g)}</i></span><div class="i"><b>${bn(x.b)} ব্যাগ রক্ত লাগবে</b><small>${E(x.h)}, ${E(x.u?x.u+', '+x.d:x.d)}</small><small class="s-w">${E(x.urg)}</small><small>${E(x.n)}</small></div><div style="display:flex;flex-direction:column;gap:6px"><a class="sm btn g" style="min-height:42px;margin:0" href="tel:${E(x.p)}">কল</a>${x.by===me||x.by==='anon'||isAdm()?`<button class="sm" data-act="close" data-id="${x.id}">পূরণ হয়েছে</button>`:''}</div></div>`).join(''):'<p class="em">এখন কোনো চলমান অনুরোধ নেই।</p>')+'<p class="note">অনুরোধ পোস্ট করতে প্রবেশ করা লাগবে।</p>'};
+/* ===== নতুন পেজ: অ্যাম্বুলেন্স, রক্তের গল্প (ব্লগ), সতর্কতা ===== */
+const amb=async()=>`<h2>অ্যাম্বুলেন্স ও জরুরি সেবা</h2><p class="mu">জরুরি মুহূর্তে দ্রুত সহায়তা পেতে নম্বরগুলো মনে রাখুন</p>
+<div class="amb9"><span class="ei">🚑</span><div style="flex:1"><b style="font-size:20px">জাতীয় জরুরি সেবা — ৯৯৯</b><div style="opacity:.92;font-size:14px;margin-top:2px">যেকোনো ফোন থেকে বিনামূল্যে · ২৪ ঘণ্টা · পুলিশ, ফায়ার সার্ভিস ও অ্যাম্বুলেন্স</div></div><a class="btn" href="tel:999">কল</a></div>
+<div class="c"><span class="b"><i>💬</i></span><div class="i"><b>স্বাস্থ্য বাতায়ন — ১৬২৬৩</b><small>স্বাস্থ্যসেবা নিয়ে তথ্য ও পরামর্শ · সরকারি হেল্পলাইন</small></div><div style="display:flex;flex-direction:column;gap:6px"><a class="sm btn g" style="min-height:42px;margin:0" href="tel:16263">কল</a></div></div>
+<div class="box"><h3>অ্যাম্বুলেন্স ডাকার সময় যা বলবেন</h3><ul><li>সঠিক ঠিকানা ও কাছাকাছি পরিচিত স্থান (ল্যান্ডমার্ক)</li><li>রোগীর অবস্থা — কী হয়েছে, চলতে পারছেন কি না</li><li>আপনার মোবাইল নম্বর (চার্জ থাকা ফোনে অপেক্ষা করুন)</li><li>সম্ভব হলে কেউ রাস্তায় বা গেটে থাকুক, যাওয়ার পথ পরিষ্কার রাখুক</li></ul></div>
+<div class="box"><h3>এলাকার হাসপাতালের নম্বর দরকার?</h3><p>ম্যাপ পেজে আপনার জেলা বা এলাকা বেছে কাছের হাসপাতালের ফোন নম্বর ও পথ দেখে নিন — অনেক হাসপাতালের নিজস্ব অ্যাম্বুলেন্স থাকে।</p><a class="btn o" href="#" data-go="map">হাসপাতাল খুঁজুন →</a></div>
+<p class="note">অ্যাম্বুলেন্সের ভাড়া ও সেবা আগে থেকে জেনে নিন। মনে রাখুন — রক্তের জন্য কাউকে অতিরিক্ত টাকা দেওয়ার দরকার নেই, রক্তদান সম্পূর্ণ স্বেচ্ছাসেবী। আপনার এলাকার যাচাই করা অ্যাম্বুলেন্স নম্বর জানা থাকলে <a href="#" data-go="hp" style="color:inherit">সহায়তা পেজ থেকে</a> জানান — তালিকায় যোগ করা হবে।</p>`;
+const BLOGS=[
+{id:'b3',tg:'জ্ঞান',t:'থ্যালাসেমিয়া রোগীদের জীবনরেখা হলেন নিয়মিত দাতারা',a:'রক্তবন্ধু ডেস্ক',d:'১৩ নভেম্বর ২০২৬',x:`<p>বাংলাদেশে হাজার হাজার শিশু থ্যালাসেমিয়া নিয়ে জন্মায়। এই রোগে শরীর যথেষ্ট লোহিত রক্তকণিকা তৈরি করতে পারে না, তাই তাদের নিয়মিত — অনেক সময় মাসে এক-দুই বার — রক্ত নিতে হয়, সারাজীবন।</p><p>একজন নিয়মিত দাতা মানে কোনো একটি পরিবারের কাছে স্থির আশা। একই দাতা নিয়মিত রক্ত দিলে হাসপাতালের পরিকল্পনাও সহজ হয়। রক্তবন্ধুতে দাতারা নিজের রক্তদানের ইতিহাস রাখতে পারেন — কখন শেষ দিয়েছেন, কোথায় দিয়েছেন, আর কত দিন পর আবার দিতে পারবেন।</p><p>আরেকটি কথা: থ্যালাসেমিয়া প্রতিরোধে বিয়ের আগে থ্যালাসেমিয়া স্ক্রিনিং খুব গুরুত্বপূর্ণ। বিস্তারিত জানতে ডাক্তারের পরামর্শ নিন।</p>`},
+{id:'b2',tg:'গল্প',t:'প্রথমবার রক্ত দিতে যাওয়ার দিন — নতুন একজন দাতার সাধারণ অভিজ্ঞতা',a:'রক্তবন্ধু ডেস্ক',d:'১২ নভেম্বর ২০২৬',x:`<p>নতুন প্রায় প্রতিজন দাতাই প্রথম দিনে একই দুশ্চিন্তা নিয়ে ব্লাড ব্যাংকের সামনে দাঁড়ান — ব্যথা লাগবে তো? পরে দুর্বল হয়ে যাব তো? অনেকের অভিজ্ঞতার মিলটা কেমন, সেটাই এই লেখায়।</p><p>নিবন্ধন ও পরীক্ষা শেষে সিরিঞ্জ লাগার আগ পর্যন্ত সময়টাই সবচেয়ে ভারী লাগে। শুরু হলে অনেকেরই খেয়াল থাকে না — কাজ শেষ হয়ে যায় সাত-আট মিনিটে। এক ব্যাগ (প্রায় ৪৫০ মিলিলিটার) রক্ত দিয়ে স্বেচ্ছাসেবকরা বিস্কুট-জুস খেয়ে কিছুক্ষণ বিশ্রাম নিয়েই বাড়ি ফিরে যান। পরের দিন জীবন স্বাভাবিক।</p><p>সবচেয়ে বড় পুরস্কারটা আসে কয়েকদিন পর — কোনো অপরিচিত মানুষের ছোট্ট মেসেজ: “আপনার রক্তে আমার মা বেঁচে উঠেছে।” এই অনুভূতিই দাতাদের বারবার ফিরিয়ে আনে।</p><p>আপনি কি প্রথমবার দিতে চান? সতর্কতা পেজে যোগ্যতা দেখে নিন। দ্বিধা হলে ব্লাড ব্যাংকের কর্মীদের জিজ্ঞেস করুন — তারা সব ভয় কেটে দেবেন।</p>`},
+{id:'b1',tg:'জ্ঞান',t:'রক্ত দিলে কি দুর্বল হয়ে যায়? প্রচলিত ৫ ভুল ধারণার জবাব',a:'রক্তবন্ধু ডেস্ক',d:'১০ নভেম্বর ২০২৬',x:`<p>রক্তদান নিয়ে ভয় ও ভুল ধারণা এখনো অনেককে দাতা হতে আটকে রাখে। চলুন সবচেয়ে প্রচলিত ৫টির জবাব জেনে নিই।</p><h3>১. “রক্ত দিলে দুর্বল হয়ে যাব”</h3><p>সুস্থ শরীর এক ব্যাগ রক্তের ঘাটতি দ্রুতই পূরণ করে — তরল অংশ ২৪-৪৮ ঘণ্টায়, লোহিত কণিকা কয়েক সপ্তাহে। পর্যাপ্ত পানি আর বিশ্রাম নিলে পরদিনই স্বাভাবিক থাকেন বেশিরভাগ মানুষ।</p><h3>২. “মোটা মানুষের রক্ত ভালো হয়”</h3><p>রক্তের মান নির্ভর করে স্বাস্থ্য ও হিমোগ্লোবিনের মাত্রার ওপর — শরীরের আকারের ওপর নয়। দানের আগে ব্লাড ব্যাংকই পরীক্ষা করে নিশ্চিত করে।</p><h3>৩. “নারীরা রক্ত দিতে পারেন না”</h3><p>একেবারেই না — বয়স, ওজন ও হিমোগ্লোবিন ঠিক থাকলে নারীরাও নিয়মিত দাতা। শুধু গর্ভাবস্থা ও স্তন্যদানের সময় দেওয়া যায় না।</p><h3>৪. “একবার দিলে সারাজীবন দিতে হয়”</h3><p>দান সম্পূর্ণ স্বেচ্ছায় — কত বার ও কখন দেবেন সেটা আপনার সিদ্ধান্ত। নিয়ম শুধু এটাই: দুই দানের মাঝে ৩-৪ মাস বিরতি।</p><h3>৫. “দরকারে কিনে নেওয়া যায়, দিতে হয় না”</h3><p>বাংলাদেশে রক্ত কেনাবেচা নিষিদ্ধ ও নিন্দনীয়। নিরাপদ রক্তের একমাত্র উৎস স্বেচ্ছাসেবী দাতা। রক্তের জন্য কেউ টাকা চাইলে সেটি রিপোর্ট করুন।</p><p>জানা থাকলে ভয় কমে। যোগ্যতা ও সতর্কতা জানতে অ্যাপের সতর্কতা পেজটি দেখুন।</p>`}];
+const blog=async()=>`<h2>রক্তের গল্প ও জ্ঞান</h2><p class="mu">দেওয়া ও নেওয়ার অভিজ্ঞতা, আর রক্ত সম্পর্কে জানার মতো লেখা</p>
+${BLOGS.map(b=>`<a class="c" href="#" data-go="post" data-p="${b.id}"><span class="b"><i>${b.tg==='গল্প'?'🩸':'💡'}</i></span><div class="i"><b>${E(b.t)}</b><small><span class="tp">${b.tg}</span>${b.a} · ${b.d}</small></div></a>`).join('')}
+<div class="box"><h3>আপনার গল্প লিখতে চান?</h3><p>রক্ত দেওয়া বা পাওয়ার সত্যিকারের অভিজ্ঞতা লিখে পাঠান — নির্বাচিত গল্প এখানে ছাপা হবে (প্রকাশের আগে যাচাই করা হয়)। অনুরোধ: রোগীর নাম বা হাসপাতালের নাম না লিখে গল্পটা লিখুন, যাতে গোপনীয়তা রক্ষা হয়।</p></div>`;
+const postPg=async id=>{const b=BLOGS.find(y=>y.id===id);if(!b)return'<p class="em">লেখাটি পাওয়া যায়নি।</p>';
+return`<h2>${E(b.t)}</h2><p class="mu" style="margin-top:6px"><span class="tp">${b.tg}</span>${b.a} · ${b.d}</p><div class="post">${b.x}</div><button class="btn o" data-act="sharepost" data-id="${b.id}">শেয়ার করুন</button><a class="btn o" href="#" data-go="blog">← সব লেখা</a>`};
+const safety=async()=>`<h2>রক্তদানের সতর্কতা</h2><p class="mu">নিরাপদে রক্ত দিতে ও নিতে জেনে রাখুন</p>
+<div class="box"><h3>কারা রক্ত দিতে পারবেন</h3><ul><li>বয়স সাধারণত ১৮ থেকে ৬০ বছর (কিছু ব্লাড ব্যাংক ৫৭ পর্যন্ত রাখে)</li><li>ওজন কমপক্ষে ৫০ কেজি</li><li>হিমোগ্লোবিন স্বাভাবিক (সাধারণত ১২.৫+ g/dL)</li><li>রক্তচাপ ও তাপমাত্রা স্বাভাবিক</li><li>দুই দানের মাঝে ৩-৪ মাস বিরতি (এই অ্যাপে ৪ মাস ধরে হিসাব হয়)</li></ul></div>
+<div class="box"><h3>যাঁরা এখন দিতে পারবেন না</h3><ul><li>জ্বর, সর্দি বা যেকোনো সংক্রমণ চলছে হলে</li><li>গর্ভাবস্থা বা স্তন্যদানের সময়</li><li>শেষ ৬ মাসে ট্যাটু, পির্সিং বা অস্ত্রোপচার হলে</li><li>হেপাটাইটিস B/C, এইডস বা রক্তবাহিত জটিল রোগ থাকলে</li><li>নিয়ন্ত্রণহীন ডায়াবেটিস বা হৃদরোগ — ডাক্তারের পরামর্শ ছাড়া নয়</li><li>অ্যান্টিবায়োটিকসহ চলমান ওষুধ চলছে হলে</li></ul><p class="note">সন্দেহ হলে লুকিয়ে রাখবেন না — ব্লাড ব্যাংককে খুলে বলুন। ভুল তথ্যে দেওয়া রক্ত রোগীর জন্য বিপজ্জনক।</p></div>
+<div class="box"><h3>দানের আগে</h3><ul><li>খালি পেটে আসবেন না — হালকা নিরামিষ খাবার খেয়ে আসুন</li><li>আগের রাতে পর্যাপ্ত ঘুম ও পর্যাপ্ত পানি</li><li>জাতীয় পরিচয়পত্র বা যেকোনো পরিচয়পত্র সঙ্গে আনুন</li><li>ওষুধ চলছে বা অসুস্থতা থাকলে আগেই জানান</li></ul></div>
+<div class="box"><h3>দানের পরে</h3><ul><li>১০-১৫ মিনিট বসে বিশ্রাম; জুস-পানি খেয়ে যান</li><li>বাটির ড্রেসিং ৪-৬ ঘণ্টা খুলবেন না</li><li>সারাদিন ভারী ব্যায়াম বা ভারী জিনিস তোলা বাদ দিন</li><li>ধূমপান অন্তত কয়েক ঘণ্টা বাদ দিন</li><li>মাথা ঘোরা বা দুর্বল লাগলে সঙ্গে থাকা কাউকে জানান</li></ul></div>
+<div class="box"><h3>কে কাকে রক্ত দিতে পারে</h3><table class="ct"><tr><th>গ্রুপ</th><th>যাদের রক্ত দিতে পারেন</th></tr><tr><td><b>O−</b></td><td>সব গ্রুপের রোগী (সর্বজনীন দাতা)</td></tr><tr><td><b>O+</b></td><td>O+, A+, B+, AB+</td></tr><tr><td><b>A−</b></td><td>A−, A+, AB−, AB+</td></tr><tr><td><b>A+</b></td><td>A+, AB+</td></tr><tr><td><b>B−</b></td><td>B−, B+, AB−, AB+</td></tr><tr><td><b>B+</b></td><td>B+, AB+</td></tr><tr><td><b>AB−</b></td><td>AB−, AB+</td></tr><tr><td><b>AB+</b></td><td>শুধু AB+ (সর্বজনীন গ্রহীতা)</td></tr></table><p class="note">চূড়ান্ত সিদ্ধান্ত হাসপাতালের ক্রস-ম্যাচিং পরীক্ষার পরেই হয় — এই ছক শুধু সাধারণ ধারণা দেয়।</p></div>
+<div class="box"><h3>নিরাপদে থাকতে (রক্ত নেওয়ার সময়)</h3><ul><li>রক্তের জন্য কাউকে টাকা দেবেন না — রক্ত কেনাবেচা নিষিদ্ধ</li><li>অচেনা কাউকে ঠিকানা বা ব্যক্তিগত তথ্য দেবেন না</li><li>হাসপাতাল/ব্লাড ব্যাংকের ব্যাগ ও রসিদ ছাড়া রক্ত নেবেন না</li><li>সন্দেহজনক প্রোফাইল অ্যাপ থেকেই রিপোর্ট করুন</li></ul></div>
+<p class="note">এই তথ্য সাধারণ জনস্বাস্থ্য নির্দেশনা মাত্র — নিজের স্বাস্থ্য নিয়ে সিদ্ধান্তের আগে অবশ্যই ডাক্তার বা ব্লাড ব্যাংকের পরামর্শ নিন।</p>`;
 async function ctx(){const u=sess();if(!u)return null;const x=await DB.get('donors',u);if(!x)return null;return{u,x,pv:(await DB.get('donorsPrivate',u))||{}}}
 async function me(){const u=sess();if(!u)return isAdm()?admin():login();const x=await DB.get('donors',u);if(!x)return isAdm()?admin():register();
 const R=(await DB.q('creq','to',u)).filter(r=>r.ok===null),s=st(x);
@@ -262,9 +315,9 @@ const CEND={"ঢাকা":[23.81,90.41],"চট্টগ্রাম":[22.36,91
 let MAP=null,LAY=null,PLACES=[],PF='hospital';
 const kindOf=t=>(t.amenity==='blood_bank'||t.healthcare==='blood_bank'||t.healthcare==='blood_donation')?'blood':'hospital';
 const tel=p=>String(p).replace(/[^+\d]/g,'');
-const mapPage=async()=>{PF='hospital';const D=sess()?await DB.pub():[],cnt={};D.forEach(x=>cnt[x.dv]=(cnt[x.dv]||0)+1);
+const mapPage=async()=>{PF='hospital';let D=[];try{D=await DB.pub()}catch(x){}const cnt={};D.forEach(x=>cnt[x.dv]=(cnt[x.dv]||0)+1);
 return`<h2>বাংলাদেশের মানচিত্র</h2><p class="mu">বিভাগ বা জেলা বেছে হাসপাতাল ও ব্লাড ব্যাংক খুঁজুন</p>
-<div class="dg">${DS.map(k=>`<button class="dc" data-act="mdiv" data-id="${k}"><b>${k}</b><small>${sess()?bn(cnt[k]||0)+' জন দাতা':'প্রবেশ করলে সংখ্যা দেখা যাবে'}</small></button>`).join('')}</div>
+<div class="dg">${DS.map(k=>`<button class="dc" data-act="mdiv" data-id="${k}"><b>${k}</b><small>${D.length?bn(cnt[k]||0)+' জন দাতা':'দাতার সংখ্যা এখন দেখা যাচ্ছে না'}</small></button>`).join('')}</div>
 <form id="f-m">${loc('m',{},1)}</form>
 <div class="row"><button class="btn" data-act="geo">এলাকা খুঁজুন</button><button class="btn g" data-act="findhere">এই এলাকায় দেখান</button></div>
 <div id="mp"></div>
@@ -296,13 +349,13 @@ if(!u&&!d&&!dv)return toast('বিভাগ, জেলা বা উপজে�
 const q=[u,d,(dv&&!d)?dv+' বিভাগ':''].filter(Boolean).join(', ')+', বাংলাদেশ';
 try{const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&accept-language=bn&countrycodes=bd&q='+encodeURIComponent(q));const j=await r.json();
 if(!j.length)return toast('এলাকা খুঁজে পাওয়া যায়নি');const b=j[0].boundingbox;MAP.fitBounds([[+b[0],+b[2]],[+b[1],+b[3]]]);await findHere()}catch(e){toast('এলাকা খোঁজা যায়নি, একটু পরে চেষ্টা করুন')}}
-let NEXT=null;const afterLogin=g=>{const n=NEXT;NEXT=null;return reset(n||(g?'me':'register'))};
+let QS=null;let NEXT=null;const afterLogin=g=>{const n=NEXT;NEXT=null;return reset(n||(g?'me':'register'))};
 let AMODE='in';const FAKE='@phone.roktobondhu.invalid';const mailOf=v=>{v=v.trim();return v.includes('@')?v.toLowerCase():ph(v)+FAKE};const isFake=e=>!!e&&e.endsWith(FAKE);
 const errMsg=x=>({'auth/account-exists-with-different-credential':'এই ইমেইল দিয়ে আগে অন্য পদ্ধতিতে (যেমন গুগল) ঢোকা হয়েছে, ওই পদ্ধতিতেই প্রবেশ করুন','auth/requires-recent-login':'নিরাপত্তার জন্য লগআউট করে আবার প্রবেশ করে চেষ্টা করুন','auth/popup-blocked':'পপআপ আটকে গেছে, ব্রাউজারে পপআপের অনুমতি দিন','auth/email-already-in-use':'এটা দিয়ে আগেই অ্যাকাউন্ট আছে। "প্রবেশ" ট্যাবে যান বা অন্য ইমেইল দিন','auth/invalid-credential':'নম্বর বা পাসওয়ার্ড ঠিক নয়','auth/wrong-password':'নম্বর বা পাসওয়ার্ড ঠিক নয়','auth/user-not-found':'এই নম্বরে নিবন্ধন নেই','auth/weak-password':'পাসওয়ার্ড আরও শক্ত দিন (কমপক্ষে ৮ অক্ষর)','auth/too-many-requests':'অনেকবার চেষ্টা হয়েছে, কিছুক্ষণ পর আবার চেষ্টা করুন','auth/invalid-email':'নম্বর বা ইমেইল ঠিক নয়','auth/popup-closed-by-user':'','auth/cancelled-popup-request':'','auth/operation-not-allowed':'এই পদ্ধতি এখনো চালু হয়নি','auth/billing-not-enabled':'ফোন কোড পাঠানো যাচ্ছে না, গুগল দিয়ে প্রবেশ করুন'}[x.code]??('ব্যর্থ হয়েছে: '+(x.code||x.message)));
-async function render(){if(CFG.apiKey.startsWith('PASTE')){$('#app').innerHTML='<p class="em">Firebase কনফিগ এখনো বসানো হয়নি। index.html এর ওপরের CFG অংশে আপনার মান বসান।</p>';return}const f={home,map:mapPage,search,register,login,request,me,pe,pa,ps,pn,pd,hp:hlp,px,admin,donor:()=>pDonor(cur.p)}[cur.r]||home;let h;
+async function render(){if(CFG.apiKey.startsWith('PASTE')){$('#app').innerHTML='<p class="em">Firebase কনফিগ এখনো বসানো হয়নি। index.html এর ওপরের CFG অংশে আপনার মান বসান।</p>';return}const f={home,map:mapPage,search,register,login,request,me,pe,pa,ps,pn,pd,hp:hlp,px,admin,donor:()=>pDonor(cur.p),amb,blog,post:()=>postPg(cur.p),safety}[cur.r]||home;let h;
 try{h=await f()}catch(x){h='<p class="em">কিছু ভুল হয়েছে। আবার চেষ্টা করুন।</p>'}
 $('#app').innerHTML=h;$('#bk').hidden=!stack.length;$('#hl').textContent=sess()?'প্রোফাইল':'প্রবেশ';$('#hl').dataset.go=sess()?'me':'login';
-document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.go===(/^(pe|pa|ps|pn|pd|hp|px)$/.test(cur.r)?'me':cur.r)));
+const NR={pe:'me',pa:'me',ps:'me',pn:'me',pd:'me',hp:'me',px:'me',amb:'home',blog:'home',post:'home',safety:'home'};document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.go===(NR[cur.r]||cur.r)));
 if(cur.r==='search'&&$('#sg'))res();if(cur.r==='map')initMap();window.scrollTo(0,0)}
 let tm;function toast(m){const t=$('#t');t.textContent=m;t.classList.add('show');clearTimeout(tm);tm=setTimeout(()=>t.classList.remove('show'),3200)}
 const reset=r=>{stack=[];cur={r};render()};
@@ -317,6 +370,7 @@ if(d.act==='mdiv'){const sl=$('#mdv');sl.value=id;sl.dispatchEvent(new Event('ch
 if(d.act==='findhere'){await findHere();return}
 if(d.act==='geo'){await geo();return}
 if(d.act==='ptab'){PF=id;document.querySelectorAll('.tabs2 button').forEach(b=>b.classList.toggle('on',b.dataset.id===PF));drawPlaces();renderList();return}
+if(d.act==='sharepost'){const b=BLOGS.find(y=>y.id===id);if(!b)return;const tx=b.t+' — রক্তবন্ধু বাংলাদেশ',u2=location.origin+location.pathname;try{if(navigator.share)await navigator.share({title:b.t,text:tx,url:u2});else{await navigator.clipboard.writeText(tx+' '+u2);toast('লিংক কপি হয়েছে')}}catch(e){}return}
 if(d.act==='card'){const cx=await DB.get('donors',sess());if(cx)await shareCard(cx);return}
 if(d.act==='deldon'){await DB.del('donations',id);await sync(sess());toast('মুছে ফেলা হয়েছে')}
 if(d.act==='out'){await signOut(auth);return reset('home')}
@@ -353,6 +407,7 @@ if(f==='f-forgot'){const e=V('fe').toLowerCase();if(!e.includes('@')||isFake(e))
 if(f==='f-addmail'){const e=V('am').toLowerCase();await verifyBeforeUpdateEmail(auth.currentUser,e);return toast('ইমেইলে একটা লিংক গেছে। লিংকে চাপলে ইমেইল যুক্ত হবে, স্প্যাম ফোল্ডারও দেখুন।')}
 if(f==='f-login'){const p=ph(V('lp'));if(!okp(p))return toast('সঠিক মোবাইল নম্বর দিন');try{if(window.rv)window.rv.clear()}catch(x){}window.rv=new RecaptchaVerifier(auth,'lb',{size:'invisible'});window.cf=await signInWithPhoneNumber(auth,'+88'+p,window.rv);$('#f-login').hidden=true;$('#f-otp').hidden=false;return toast('কোড পাঠানো হয়েছে')}
 if(f==='f-otp'){await window.cf.confirm(V('lo'));const x=await DB.get('donors',sess());return reset(x?'me':'register')}
+if(f==='f-qs'){QS={g:V('hqg'),dv:dvOf(V('hqd')),d:V('hqd')};return go('search')}
 if(f==='f-req'){if(!sess())return toast('অনুরোধ পোস্ট করতে আগে প্রবেশ করুন');const p=ph(V('qp'));if(!okp(p))return toast('সঠিক মোবাইল নম্বর দিন');
 const q={id:uid(),g:V('qg'),b:V('qb'),dv:V('qdv'),d:V('qd'),u:V('qu'),h:V('qh'),urg:V('qurg'),n:V('qn'),p,by:sess()||'anon',ts:Date.now(),open:true};await DB.put('requests',q);
 const k=(await DB.pub()).filter(x=>x.g===q.g&&x.d===q.d&&!x.hid&&!x.sus&&st(x)[0]==='s-ok').length;toast('অনুরোধ পোস্ট হয়েছে। এই জেলায় '+bn(k)+' জন প্রস্তুত দাতা আছেন।');return render()}
@@ -377,5 +432,5 @@ if(ios&&!dism)setTimeout(function(){show()},2500);
 })();
 onAuthStateChanged(auth,async u=>{ADM=false;if(u){ADM=!!(await DB.get('admins',u.uid));migrate(u.uid).catch(()=>{})}render()});
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5afa401def1b60e',t:'MTc5NDc2MDIyOA=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5afa401def1b60e',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5b129d25eb7931c',t:'MTc5NDc3NjE5NA=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5b129d25eb7931c',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
