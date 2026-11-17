@@ -297,8 +297,8 @@ return`<h2>অ্যাডমিন মডারেশন</h2><div class="box"><
 
 const SITE='https://roktobondhubd.com/',QRURI='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAewAAAHsAQAAAAA4UaPNAAACl0lEQVR4nO3dS27iUBCF4b8CEpmRHTg7ITvD7Ax2Yu8AZkEiPj24flwQiZImDbg5NTK2P117ULoPl02IC2L3dIkGc3Nzc3Nzc3Nzc3Nzc/Of811k8QLAKuKJfbwAmyjJT4hfbt3c3PxbMe23iqrd2D/3+xQzQf26EBBNt3tV/lLr5uaPzFcRESkF63gDJL0DqYsEPiIi4vXftG5ubv73fBMSajN0ofK6rZubm/+ILxRBSNpSaJV62Ou1bm5ufjaUYkvRbumduap0MCUsLCQR3QkqezXqezc3Hx0fEjaLuSoWKlHDTFsKrVnqrBr1vZubj5bPlcWWdg6bR36CTvmFrZubm38vsiFx2e2bdwPf9CSmOMrRYezsHtbc/Mo87zjLtGfWT1v7WLOUGiaSpIqlE9bc/Cb8ZA4bOgCpFy0hshUoSQdofzphzc1vyefDsHcmqermsN2iEwCT07HznVy8ufmj8DND4hSLYdpanA6X3cOam1/Id6lkMHTos2oVarL+Ug0T7aJQlT2kuY+LNzd/FH68zCspVT5I6+7YlnYJKa35ehJqbn47fqZUSUOxw1F1UkOaoLpUydz8VvwkYbt32IphEakvNIRuEWnI7FHfu7n56PhxBVIf1fCGTUrYpfrnMlk4Yc3Nr8o/KQbu4x2G8fHBy7zm5nfCizxH6+5TLGmVGEhz2H1kg+XfbN3c3Pw7kc1hS4BJW510/qVzz2HNzW/Jp58d2ATDh5Q2b0A0H9N9QB3QdbGjvndz8/+JL6Wm/W4hgBom7ZS2vELr5ubmX/N+JZi2/jeemKmOiDdIHxp9Pn7Kc0cXb24+Cj6MaevIdtevACig+4Zoe3iXnzbuezc3Hx0P/5+Uubm5ubm5ubm5ubm5+Uj4HwssW6Xoi6KBAAAAAElFTkSuQmCC';
 const loadImg=u=>new Promise(r=>{const i=new Image();i.crossOrigin='anonymous';i.referrerPolicy='no-referrer';i.onload=()=>r(i);i.onerror=()=>r(null);i.src=u});
-async function drawCard(x){
 const FN='"Hind Siliguri","Noto Sans Bengali",sans-serif',F=(w,z)=>w+' '+z+'px '+FN;
+async function drawCard(x){
 try{await document.fonts.load(F(700,48));await document.fonts.load(F(400,32))}catch(e){}
 const c=document.createElement('canvas');c.width=1080;c.height=1350;const g=c.getContext('2d');
 const fit=(t,w,z,wt)=>{g.font=F(wt,z);while(g.measureText(t).width>w&&z>24){z-=2;g.font=F(wt,z)}};
