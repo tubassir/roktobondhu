@@ -158,6 +158,7 @@ ul{margin:6px 0;padding-left:20px}
 <!-- Google Analytics 4 (ভিজিটর পরিসংখ্যান) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-MNL21ZV2Q7"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-MNL21ZV2Q7');</script>
+<style>#nav a{flex:1;min-height:54px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font:600 12px inherit;font-family:inherit;color:var(--rdt);background:var(--sf);border-radius:10px;text-decoration:none}</style>
 </head>
 <body>
 <div class="w">
@@ -174,7 +175,7 @@ ul{margin:6px 0;padding-left:20px}
 @keyframes ibar{from{opacity:0;transform:translateX(-50%) translateY(14px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 </style>
 <div id="ibar" hidden><button id="ibtn" class="ib">📲 অ্যাপ ইনস্টল করুন</button><button id="ibx" class="ic" aria-label="বন্ধ করুন">✕</button></div>
-<nav id="nav"><button data-go="home" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg><span>হোম</span></button><button data-go="map" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg><span>ম্যাপ</span></button><button data-go="search" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.2c3 .2 5 2.4 5 5.8"/></svg><span>দাতা</span></button><button data-go="request" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 01-12 0c0-4.5 6-11 6-11z"/><path d="M12 11v5M9.5 13.5h5"/></svg><span>জরুরি</span></button><button data-go="me" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg><span>প্রোফাইল</span></button></nav>
+<nav id="nav"><button data-go="home" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg><span>হোম</span></button><button data-go="map" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg><span>ম্যাপ</span></button><button data-go="search" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.2c3 .2 5 2.4 5 5.8"/></svg><span>দাতা</span></button><button data-go="request" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 01-12 0c0-4.5 6-11 6-11z"/><path d="M12 11v5M9.5 13.5h5"/></svg><span>জরুরি</span></button><button data-go="me" data-root><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg><span>প্রোফাইল</span></button><a href="/emergency.html" aria-label="জরুরি ফেসবুক-পোস্ট বানান"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H6a1 1 0 00-1 1v16a1 1 0 001 1h12a1 1 0 001-1V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span>পোস্ট</span></a></nav>
 <div id="t" role="status"></div>
 <div id="alb" hidden></div>
 <script type="module">

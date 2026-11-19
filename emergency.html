@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>রক্তবন্ধু — জরুরি পোস্ট জেনারেটর</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MNL21ZV2Q7"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-MNL21ZV2Q7');</script>
+<style>
+  :root{--red:#C8102E;--grn:#00704A;--gold:#FFD100;--ink:#1a2420;--bg:#f4f6f3}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Noto Sans Bengali','SolaimanLipi',system-ui,sans-serif}
+  body{background:var(--bg);color:var(--ink);min-height:100vh}
+  .wrap{max-width:520px;margin:0 auto;padding:10px 12px 40px}
+  .back{display:inline-block;margin:10px 2px 0;font-size:13.5px;font-weight:600;color:var(--grn);text-decoration:none}
+  header{background:linear-gradient(180deg,#0b2015,#11321f);color:#fff;border-radius:16px;padding:18px 16px;text-align:center;margin-bottom:14px;position:relative;overflow:hidden}
+  header .stripe{position:absolute;left:0;right:0;bottom:0;height:6px;background:linear-gradient(90deg,var(--grn) 33%,var(--red) 33% 66%,var(--gold) 66%)}
+  .drop{width:46px;height:46px;margin:0 auto 6px}
+  .drop svg{width:100%;height:100%}
+  header h1{font-size:20px}
+  header p{font-size:12.5px;color:var(--gold);margin-top:3px}
+  .card{background:#fff;border-radius:16px;padding:16px;box-shadow:0 2px 10px rgba(10,30,20,.08);margin-bottom:14px}
+  .card h2{font-size:16px;color:var(--grn);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+  label{display:block;font-size:13px;font-weight:600;margin:10px 0 4px}
+  .req{color:var(--red)}
+  input,select{width:100%;padding:11px 12px;border:1.5px solid #d5ddd6;border-radius:10px;font-size:15px;background:#fbfcfa;color:var(--ink);font-family:inherit}
+  input:focus,select:focus{outline:none;border-color:var(--grn)}
+  .row{display:flex;gap:10px}.row>div{flex:1}
+  .hint{font-size:11px;color:#8a958e;margin-top:3px}
+  .btn{display:inline-block;border:none;cursor:pointer;font-weight:700;border-radius:12px;padding:12px 18px;font-size:15px;font-family:inherit}
+  .btn-ex{background:var(--bg);color:var(--ink);font-size:12.5px;padding:6px 12px;border-radius:8px;margin-left:auto}
+  .btn-copy{background:var(--gold);color:#1a1a05;width:100%;margin-top:12px;font-size:16px;box-shadow:0 3px 0 #c9a600}
+  .btn-copy:active{transform:translateY(2px);box-shadow:none}
+  .post-prev{background:#fff;border-radius:16px;box-shadow:0 2px 10px rgba(10,30,20,.08);overflow:hidden}
+  .post-prev .ph{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #edf0ec}
+  .post-prev .av{width:38px;height:38px;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+  .post-prev .nm{font-size:14px;font-weight:700}
+  .post-prev .tm{font-size:11px;color:#7a857e}
+  .post-body{padding:14px;white-space:pre-wrap;font-size:15px;line-height:1.75}
+  textarea#out{width:100%;min-height:270px;border:1.5px dashed #b9c4bc;border-radius:10px;padding:12px;font-size:14.5px;line-height:1.7;background:#fffdf2;color:var(--ink);resize:vertical;font-family:inherit}
+  .ok{background:#e8f5ee!important;color:var(--grn)!important}
+  footer{text-align:center;font-size:11.5px;color:#98a29a;margin-top:6px}
+  footer b{color:var(--grn)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="/">← মূল সাইটে ফিরে যান</a>
+  <header>
+    <div class="drop"><svg viewBox="0 0 100 100"><path d="M50 6C50 6 16 52 16 72a34 34 0 0 0 68 0C84 52 50 6 50 6z" fill="#C8102E"/><ellipse cx="38" cy="64" rx="9" ry="12" fill="#EA4860" transform="rotate(-18 38 64)"/></svg></div>
+    <h1>রক্তবন্ধু বাংলাদেশ</h1>
+    <p>জরুরি রক্তের পোস্ট জেনারেটর</p>
+    <div class="stripe"></div>
+  </header>
+
+  <div class="card">
+    <h2>🩸 তথ্য দিন <button class="btn btn-ex" id="demo">উদাহরণ দেখাও</button></h2>
+    <div class="row">
+      <div>
+        <label>রক্তের গ্রুপ <span class="req">*</span></label>
+        <select id="grp">
+          <option value="">— বাছুন —</option>
+          <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+          <option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+        </select>
+      </div>
+      <div>
+        <label>কয়টা ব্যাগ? <span class="req">*</span></label>
+        <select id="bag"><option>১</option><option>২</option><option>৩</option><option>৪</option></select>
+      </div>
+    </div>
+    <label>রোগীর অবস্থা / কারণ</label>
+    <input id="why" type="text" placeholder="যেমন: সিজার, থ্যালাসেমিয়া, অ্যাক্সিডেন্ট">
+    <div class="hint">না জানলে ফাঁকা রাখুন</div>
+    <label>হাসপাতাল / ঠিকানা <span class="req">*</span></label>
+    <input id="hosp" type="text" placeholder="যেমন: ঢাকা মেডিকেল কলেজ হাসপাতাল">
+    <label>জেলা <span class="req">*</span></label>
+    <input id="dist" type="text" placeholder="যেমন: ঢাকা">
+    <div class="row">
+      <div>
+        <label>কখন লাগবে?</label>
+        <input id="when" type="text" placeholder="যেমন: আজ রাতে">
+      </div>
+      <div>
+        <label>যোগাযোগের নম্বর <span class="req">*</span></label>
+        <input id="phone" type="tel" placeholder="01XXXXXXXXX" inputmode="tel">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>👀 পোস্ট এমন দেখাবে</h2>
+    <div class="post-prev">
+      <div class="ph">
+        <div class="av">র</div>
+        <div><div class="nm">রক্তবন্ধু বাংলাদেশ</div><div class="tm">🌐 roktobondhubd.com · এখন</div></div>
+      </div>
+      <div class="post-body" id="prev">উপরের ফর্মে তথ্য দিন — পোস্ট এখানে তৈরি হয়ে যাবে…</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📋 কপি করে ফেসবুকে পেস্ট করুন</h2>
+    <textarea id="out" readonly>উপরের ফর্মে তথ্য দিলে এখানে পোস্টটি আসবে…</textarea>
+    <button class="btn btn-copy" id="copy">📋 পোস্ট কপি করুন</button>
+    <div class="hint" style="text-align:center;margin-top:8px">কপি বাটনে সমস্যা হলে বাক্সের লেখা সিলেক্ট করে নিজে কপি করুন</div>
+  </div>
+
+  <footer>বানানো হয়েছে ❤️ দিয়ে — <b>রক্তবন্ধু বাংলাদেশ</b> · রক্ত দিন, প্রাণ বাঁচান</footer>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const bn=s=>String(s).replace(/[0-9]/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
+function build(){
+  const g=$('grp').value, bag=$('bag').value, why=$('why').value.trim(),
+        hosp=$('hosp').value.trim(), dist=$('dist').value.trim(),
+        when=$('when').value.trim(), ph=$('phone').value.trim();
+  if(!g||!hosp||!dist||!ph){
+    $('prev').textContent='⚠️ তারকাচিহ্নিত (*) ঘরগুলো পূরণ করুন — গ্রুপ, হাসপাতাল, জেলা আর নম্বর লাগবেই।';
+    $('out').value='উপরের ফর্মে তথ্য দিলে এখানে পোস্টটি আসবে…';return;
+  }
+  const neg=g.includes('-');
+  let t='🚨 জরুরি ভাবে রক্ত দাতা প্রয়োজন 🩸\n\n';
+  t+='▪ গ্রুপ: '+g+(neg?' (নেগেটিভ — বিরল)':'')+'\n';
+  t+='▪ প্রয়োজন: '+bag+' ব্যাগ\n';
+  if(why)t+='▪ কারণ: '+why+'\n';
+  t+='▪ হাসপাতাল: '+hosp+', '+dist+'\n';
+  if(when)t+='▪ কখন: '+when+'\n';
+  t+='📞 যোগাযোগ: '+bn(ph)+' (কল / হোয়াটসঅ্যাপ)\n\n';
+  t+='স্বেচ্ছায় রক্ত দিতে ইচ্ছুক হলে কমেন্টে জানান বা সরাসরি কল করুন।\n';
+  t+='একটা শেয়ার = একটা জীবন বাঁচানোর সম্ভাবনা 🙏\n\n';
+  t+='🔗 রক্তদাতা খুঁজুন / নিবন্ধন (ফ্রি): roktobondhubd.com';
+  $('prev').textContent=t;
+  $('out').value=t;
+}
+['grp','bag','why','hosp','dist','when','phone'].forEach(id=>$(id).addEventListener('input',build));
+$('demo').addEventListener('click',()=>{
+  $('grp').value='B-';$('bag').value='২';$('why').value='অপারেশন';
+  $('hosp').value='ঢাকা মেডিকেল কলেজ হাসপাতাল';$('dist').value='ঢাকা';
+  $('when').value='আগামীকাল সকাল';$('phone').value='01712345678';build();
+  if(typeof gtag==='function')gtag('event','post_demo_used');
+});
+$('copy').addEventListener('click',async()=>{
+  const v=$('out').value;
+  if(v.startsWith('উপরের'))return;
+  let done=false;
+  try{await navigator.clipboard.writeText(v);done=true}catch(e){
+    $('out').select();
+    try{done=document.execCommand('copy')}catch(e2){}
+  }
+  if(done&&typeof gtag==='function')gtag('event','post_copied');
+  const b=$('copy'),old='📋 পোস্ট কপি করুন';
+  if(done){b.textContent='✅ কপি হয়ে গেছে! এবার ফেসবুকে পেস্ট করুন';b.classList.add('ok')}
+  else{$('out').select();b.textContent='👆 লেখাটা সিলেক্ট করা আছে — কপি চাপুন'}
+  setTimeout(()=>{b.textContent=old;b.classList.remove('ok')},2500);
+});
+</script>
+</body>
+</html>
