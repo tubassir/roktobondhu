@@ -480,10 +480,10 @@ const b=MAP.getBounds(),bb=[b.getSouth(),b.getWest(),b.getNorth(),b.getEast()].m
 const ck='ovk:'+bb.split(',').map(v=>Math.round(v*150)).join('.');
 let j=null;try{const c=JSON.parse(localStorage.getItem(ck)||'null');if(c&&Date.now()-c.t<6048e5)j=c.d}catch(e){}
 $('#pl').innerHTML='<p class="em">খোঁজা হচ্ছে…</p>';
-if(!j){const q=`[out:json][timeout:20];(nwr["amenity"="hospital"](${bb});nwr["amenity"="blood_bank"](${bb});nwr["healthcare"="blood_bank"](${bb});nwr["healthcare"="blood_donation"](${bb}););out center 150;`;
-const ac=new AbortController(),to=setTimeout(()=>ac.abort(),14000);
-try{const r=await Promise.any(['https://overpass.kumi.systems/api/interpreter','https://overpass-api.de/api/interpreter'].map(u=>fetch(u+'?data='+encodeURIComponent(q),{signal:ac.signal}).then(x=>{if(!x.ok)throw 0;return x.json()})));j=r;try{localStorage.setItem(ck,JSON.stringify({t:Date.now(),d:j}))}catch(e){}}catch(e){}
-clearTimeout(to)}
+if(!j){const q=`[out:json][timeout:25];(nwr["amenity"="hospital"](${bb});nwr["amenity"="blood_bank"](${bb});nwr["healthcare"="blood_bank"](${bb});nwr["healthcare"="blood_donation"](${bb}););out center 150;`;
+const rb=u=>fetch(u+'?data='+encodeURIComponent(q)).then(x=>{if(!x.ok)throw 0;return x.json()});
+const race=(ps,tmo)=>new Promise((res,rej)=>{let n=0;const to=setTimeout(()=>rej(0),tmo);ps.forEach(p=>p.then(v=>{clearTimeout(to);res(v)}).catch(()=>{if(++n===ps.length){clearTimeout(to);rej(0)}}))});
+try{const r=await race(['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter'].map(rb),40000);j=r;try{localStorage.setItem(ck,JSON.stringify({t:Date.now(),d:j}))}catch(e){}}catch(e){}}
 if(!j){$('#pl').innerHTML='<p class="em">তথ্য আনা যায়নি। একটু পরে আবার চেষ্টা করুন।</p>';return}
 PLACES=j.elements.map(e=>{const t=e.tags||{};return{id:e.type+e.id,k:kindOf(t),n:t['name:bn']||t.name||'নামহীন',ph:(t.phone||t['contact:phone']||'').split(';')[0].trim(),ad:t['addr:full']||[t['addr:street'],t['addr:city']].filter(Boolean).join(', '),la:e.lat!=null?e.lat:(e.center&&e.center.lat),lo:e.lon!=null?e.lon:(e.center&&e.center.lon)}}).filter(p=>p.la!=null);
 drawPlaces();renderList()}
